@@ -1,8 +1,4 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
-
-class EWC():
+class EWC:
     def __init__(self, model, dataloader, base_loss, fisher_multiplier):
         self.model = model
         self.dataloader = dataloader
@@ -24,7 +20,7 @@ class EWC():
 
             for name, param in self.model.named_parameters():
                 if param.requires_grad:
-                    fisher = param.grad.data ** 2
+                    fisher = param.grad.data**2
                     if name not in self.precision_matrices:
                         self.precision_matrices[name] = fisher
                     else:
@@ -34,7 +30,9 @@ class EWC():
         for name, param in self.model.named_parameters():
             if param.requires_grad:
                 precision = self.precision_matrices[name]
-                param.grad.data += self.fisher_multiplier * precision * (param - param.data)
+                param.grad.data += (
+                    self.fisher_multiplier * precision * (param - param.data)
+                )
 
     def train(self, criterion, optimizer, num_epochs):
         for epoch in range(num_epochs):
@@ -46,10 +44,12 @@ class EWC():
                 optimizer.zero_grad()
                 outputs = self.model(inputs)
                 loss = criterion(outputs, labels)
-                self.update_loss(criterion)  
+                self.update_loss(criterion)
                 loss.backward()
                 optimizer.step()
 
                 running_loss += loss.item()
 
-            print(f"Epoch {epoch+1}/{num_epochs} - Loss: {running_loss / len(self.dataloader)}")
+            print(
+                f"Epoch {epoch+1}/{num_epochs} - Loss: {running_loss / len(self.dataloader)}"
+            )
