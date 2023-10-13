@@ -1,3 +1,4 @@
 from . import (
-    concept_drift_detector
+    concept_drift_detector,
+    strategies
 )
