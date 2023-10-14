@@ -1,4 +1,5 @@
-class DDM:
-
+class IStrategy:
+    
+    @abstractmethod
     def is_concept_drift_detected(self, model, ni_x, ni_y):
-        return True
+        pass

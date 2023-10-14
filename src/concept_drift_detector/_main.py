@@ -10,8 +10,8 @@ def split_train_test(split_date ,df):
     after_missing_dates.reset_index(drop=True, inplace=True)
     return before_missing_dates, after_missing_dates
 
-sorted_mean_arrival_time = pd.read_csv('src\concept_drift_detector\input.csv')
-train,test = split_train_test('2022-03-01' ,sorted_mean_arrival_time)
+sorted_mean_arrival_time = pd.read_csv('src/concept_drift_detector/input.csv')
+train, test = split_train_test('2022-03-01', sorted_mean_arrival_time)
 
 X_train = train.drop(columns=['arrival_time_in_seconds', 'date'])
 X_test = test.drop(columns=['arrival_time_in_seconds', 'date'])
@@ -22,5 +22,5 @@ pipeline = Pipeline(  [(   "model", xg.XGBRegressor(objective ='reg:linear')   )
 pipeline.fit(X=X_train, y=y_train)
 
 cdd = CDD()
-is_detect = cdd.is_concept_drift(pipeline, X_test,y_test)
-print(is_detect)
+is_detected = cdd.is_concept_drift_detected(pipeline, X_test, y_test)
+print(is_detected)
