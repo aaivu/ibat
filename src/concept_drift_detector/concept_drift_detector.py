@@ -1,4 +1,4 @@
-from strategies.ddm import DDM
+from src.concept_drift_detector.strategies.ddm import DDM
 
 class CDD:
     def __init__(self):

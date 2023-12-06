@@ -1,7 +1,8 @@
 import pandas as pd
 import xgboost as xg
-from concept_drift_detector import CDD 
 from sklearn.pipeline import Pipeline
+from src.concept_drift_detector import CDD
+
 
 def split_train_test(split_date ,df):
     before_missing_dates = df[df['date'] < split_date]
