@@ -1,7 +1,9 @@
+import warnings
 from typing import Optional
 
 import matplotlib.pyplot as plt
 from pandas import DataFrame, to_datetime
+from pandas.errors import SettingWithCopyWarning
 from sklearn.metrics import (
     mean_absolute_error,
     mean_absolute_percentage_error,
@@ -12,6 +14,8 @@ from src.models.mme4bat import MME4BAT
 
 
 def run() -> None:
+    warnings.filterwarnings("ignore", category=SettingWithCopyWarning)
+
     rt_df: DataFrame = BUS_654_RUNNING_TIMES.dataframe
     dt_df: DataFrame = BUS_654_DWELL_TIMES.dataframe
 
@@ -123,7 +127,7 @@ def run() -> None:
     print(
         f"RMSE for base model: {mean_squared_error(true_prediction, base_model_prediction, squared=False)}"
     )
-
+    print("-----------------------------------------------------------------")
     print(
         f"MAE for incremental online learning model: {mean_absolute_error(true_prediction, model_prediction)}"
     )
@@ -140,9 +144,6 @@ def run() -> None:
 
     plt.figure(figsize=(100, 20))
 
-    print(len(true_prediction))
-    print(len(base_model_prediction))
-    print(len(model_prediction))
     x = list(range(len(true_prediction)))
     plt.plot(x, true_prediction, label="True dwell time")
     plt.plot(x, base_model_prediction, label="Base model prediction")

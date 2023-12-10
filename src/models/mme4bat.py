@@ -38,7 +38,8 @@ class MME4BAT:
         dt_x_gt_0 = dt_x[is_dt_gt_0.iloc[:, 0] == 1]
         dt_y_gt_0 = self.xgb_dt_regressor.predict(dt_x_gt_0)
 
-        dt_y = DataFrame({"prediction": zeros((len(dt_x)))})
-        dt_y[is_dt_gt_0.iloc[:, 0] == 1] = dt_y_gt_0
+        dt_y = is_dt_gt_0.copy()
+        dt_y.loc[dt_y["prediction"] > 0, "prediction"] = dt_y_gt_0["prediction"].to_numpy()
+        dt_y.loc[dt_y["prediction"] < 0, "prediction"] = 0
 
         return dt_y
