@@ -7,13 +7,13 @@ from sklearn.metrics import (
     mean_absolute_percentage_error,
     mean_squared_error,
 )
-from src.datasets import Bus654DwellTimes, Bus654RunningTimes
+from src.datasets import BUS_654_DWELL_TIMES, BUS_654_RUNNING_TIMES
 from src.models.mme4bat import MME4BAT
 
 
 def run() -> None:
-    rt_df: DataFrame = Bus654RunningTimes.dataframe
-    dt_df: DataFrame = Bus654DwellTimes.dataframe
+    rt_df: DataFrame = BUS_654_RUNNING_TIMES.dataframe
+    dt_df: DataFrame = BUS_654_DWELL_TIMES.dataframe
 
     dt_df["date"] = to_datetime(dt_df["date"])
     cutoff_date = to_datetime("2022-09-26")
