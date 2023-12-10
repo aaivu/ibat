@@ -2,45 +2,71 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-from datetime import datetime,date
+from datetime import datetime, date
 import glob
 import os
 
 
-path= './cleaned/data/bus_dwell_times_654.csv'
+path = "./cleaned/data/bus_dwell_times_654.csv"
 stop_times = pd.read_csv(path)
 
-stop_times['date'] = pd.to_datetime(stop_times['date'])
-cutoff_date = pd.to_datetime('2022-03-01')
-stop_times = stop_times.loc[stop_times['date'] < cutoff_date]
-stop_times['week_no'] = stop_times['date'].dt.isocalendar().week
+stop_times["date"] = pd.to_datetime(stop_times["date"])
+cutoff_date = pd.to_datetime("2022-03-01")
+stop_times = stop_times.loc[stop_times["date"] < cutoff_date]
+stop_times["week_no"] = stop_times["date"].dt.isocalendar().week
 
-stop_times['day_of_week'] = stop_times['date'].dt.weekday
-stop_times['time_of_day'] = list(map(lambda x: x.hour, pd.to_datetime(stop_times['arrival_time'])))
+stop_times["day_of_week"] = stop_times["date"].dt.weekday
+stop_times["time_of_day"] = list(
+    map(lambda x: x.hour, pd.to_datetime(stop_times["arrival_time"]))
+)
 
 df = stop_times
-old = [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,  1,  2,  3,  4,  5, 6,  7,  8,  9]
+old = [
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+]
 new = list(range(1, 24))
-d = dict(zip(old,new))
-df['week_no'] = list(map(lambda x: d[x], df['week_no']))
+d = dict(zip(old, new))
+df["week_no"] = list(map(lambda x: d[x], df["week_no"]))
 
 
-df = df[df['direction']==1]
+df = df[df["direction"] == 1]
 
-long_stops = [101,105,109,113]
-dfl = df.loc[df['bus_stop'].isin(long_stops)]
+long_stops = [101, 105, 109, 113]
+dfl = df.loc[df["bus_stop"].isin(long_stops)]
 
-short_stops= [102,106,107,108,110,111,112,114]
-dfs=df.loc[df['bus_stop'].isin(short_stops)]
+short_stops = [102, 106, 107, 108, 110, 111, 112, 114]
+dfs = df.loc[df["bus_stop"].isin(short_stops)]
 
-mean = np.mean(dfs['dwell_time_in_seconds'], axis=0)
-sd = np.std(dfs['dwell_time_in_seconds'], axis=0)
+mean = np.mean(dfs["dwell_time_in_seconds"], axis=0)
+sd = np.std(dfs["dwell_time_in_seconds"], axis=0)
 
 # print(mean)
 
 # print(sd)
 
-df = df.drop(df[df['dwell_time_in_seconds'] > 600].index)
+df = df.drop(df[df["dwell_time_in_seconds"] > 600].index)
 
 # def fill_nan_median(ts, medians):
 #   ix = pd.to_datetime(ts.index)
@@ -49,62 +75,138 @@ df = df.drop(df[df['dwell_time_in_seconds'] > 600].index)
 #   ts.index = ix
 #   return ts
 
-dft = df.groupby('week_no')
+dft = df.groupby("week_no")
 
 groupings = list(dft.groups.keys())
 
 df.reset_index(drop=True, inplace=True)
 
 for i in range(3, len(groupings)):
-  curr = dft.get_group(groupings[i])
-  prev1 = dft.get_group(groupings[i-1])
-  prev2 = dft.get_group(groupings[i-2])
-  prev3 = dft.get_group(groupings[i-3])
- 
-  #curr['dt(t-1)']= prev['day_of_week']
-  for index, row in curr.iterrows():
-    day = row['day_of_week']
-    time = row['time_of_day']
-    stop = row['bus_stop']
-    agg1 = prev1.loc[(prev1['day_of_week']==day) & (prev1['time_of_day']==time) & (prev1['bus_stop']==stop)]
-    agg2 = prev2.loc[(prev2['day_of_week']==day) & (prev2['time_of_day']==time) & (prev2['bus_stop']==stop)]
-    agg3 = prev3.loc[(prev3['day_of_week']==day) & (prev3['time_of_day']==time) & (prev3['bus_stop']==stop)]
+    curr = dft.get_group(groupings[i])
+    prev1 = dft.get_group(groupings[i - 1])
+    prev2 = dft.get_group(groupings[i - 2])
+    prev3 = dft.get_group(groupings[i - 3])
 
-    df.at[index,'dt(w-1)'] = round(agg1['dwell_time_in_seconds'].mean(), 1)
-    df.at[index,'dt(w-2)'] = round(agg2['dwell_time_in_seconds'].mean(), 1)
-    df.at[index,'dt(w-3)'] = round(agg3['dwell_time_in_seconds'].mean(), 1)
+    # curr['dt(t-1)']= prev['day_of_week']
+    for index, row in curr.iterrows():
+        day = row["day_of_week"]
+        time = row["time_of_day"]
+        stop = row["bus_stop"]
+        agg1 = prev1.loc[
+            (prev1["day_of_week"] == day)
+            & (prev1["time_of_day"] == time)
+            & (prev1["bus_stop"] == stop)
+        ]
+        agg2 = prev2.loc[
+            (prev2["day_of_week"] == day)
+            & (prev2["time_of_day"] == time)
+            & (prev2["bus_stop"] == stop)
+        ]
+        agg3 = prev3.loc[
+            (prev3["day_of_week"] == day)
+            & (prev3["time_of_day"] == time)
+            & (prev3["bus_stop"] == stop)
+        ]
 
-df['dt(w-1)'].fillna(df.groupby(['bus_stop', 'time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace = True)
-df['dt(w-2)'].fillna(df.groupby(['bus_stop', 'time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace = True)
-df['dt(w-3)'].fillna(df.groupby(['bus_stop', 'time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace = True)
+        df.at[index, "dt(w-1)"] = round(agg1["dwell_time_in_seconds"].mean(), 1)
+        df.at[index, "dt(w-2)"] = round(agg2["dwell_time_in_seconds"].mean(), 1)
+        df.at[index, "dt(w-3)"] = round(agg3["dwell_time_in_seconds"].mean(), 1)
 
-for name, group in df.groupby('date'):
-  for index, row in group.iterrows():
-    time = row['time_of_day']
-    stop = row['bus_stop']
+df["dt(w-1)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
+df["dt(w-2)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
+df["dt(w-3)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
 
-    df.at[index,'dt(t-1)'] =  round(group['dwell_time_in_seconds'][(group['time_of_day']==(time-1)) & (group['bus_stop']==stop)].mean(), 1)
-    df.at[index,'dt(t-2)'] =  round(group['dwell_time_in_seconds'][(group['time_of_day']==(time-2)) & (group['bus_stop']==stop)].mean(), 1)
+for name, group in df.groupby("date"):
+    for index, row in group.iterrows():
+        time = row["time_of_day"]
+        stop = row["bus_stop"]
 
-df['dt(t-1)'].fillna(df.groupby(['bus_stop','time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace=True)
-df['dt(t-2)'].fillna(df.groupby(['bus_stop','time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace=True)
+        df.at[index, "dt(t-1)"] = round(
+            group["dwell_time_in_seconds"][
+                (group["time_of_day"] == (time - 1)) & (group["bus_stop"] == stop)
+            ].mean(),
+            1,
+        )
+        df.at[index, "dt(t-2)"] = round(
+            group["dwell_time_in_seconds"][
+                (group["time_of_day"] == (time - 2)) & (group["bus_stop"] == stop)
+            ].mean(),
+            1,
+        )
 
-for name, group in df.groupby('trip_id'):
-  for index, row in group.iterrows():
-    stop = row['bus_stop']
-    trip = row['trip_id']
-    df.at[index,'dt(n-1)'] = round(group['dwell_time_in_seconds'][(group['bus_stop']==(stop-1))].mean(), 1)
-    df.at[index,'dt(n-2)'] = round(group['dwell_time_in_seconds'][(group['bus_stop']==(stop-2))].mean(), 1)
-    df.at[index,'dt(n-3)'] = round(group['dwell_time_in_seconds'][(group['bus_stop']==(stop-3))].mean(), 1)
+df["dt(t-1)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
+df["dt(t-2)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
 
-df['dt(n-1)'].fillna(df.groupby(['bus_stop','time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace = True)
-df['dt(n-2)'].fillna(df.groupby(['bus_stop','time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace = True)
-df['dt(n-3)'].fillna(df.groupby(['bus_stop','time_of_day'])['dwell_time_in_seconds'].transform('mean'), inplace = True)
+for name, group in df.groupby("trip_id"):
+    for index, row in group.iterrows():
+        stop = row["bus_stop"]
+        trip = row["trip_id"]
+        df.at[index, "dt(n-1)"] = round(
+            group["dwell_time_in_seconds"][(group["bus_stop"] == (stop - 1))].mean(), 1
+        )
+        df.at[index, "dt(n-2)"] = round(
+            group["dwell_time_in_seconds"][(group["bus_stop"] == (stop - 2))].mean(), 1
+        )
+        df.at[index, "dt(n-3)"] = round(
+            group["dwell_time_in_seconds"][(group["bus_stop"] == (stop - 3))].mean(), 1
+        )
 
-df[['dt(w-1)','dt(w-2)', 'dt(w-3)', 'dt(t-1)', 'dt(t-2)', 'dt(n-1)', 'dt(n-2)','dt(n-3)']] = df[['dt(w-1)','dt(w-2)', 'dt(w-3)', 'dt(t-1)', 'dt(t-2)', 'dt(n-1)', 'dt(n-2)','dt(n-3)']].apply(pd.Series.round)
+df["dt(n-1)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
+df["dt(n-2)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
+df["dt(n-3)"].fillna(
+    df.groupby(["bus_stop", "time_of_day"])["dwell_time_in_seconds"].transform("mean"),
+    inplace=True,
+)
 
-filename = 'bus_stop_times_feature_added_new.csv'
-data.to_csv(filename, encoding='utf-8-sig', index=False)
+df[
+    [
+        "dt(w-1)",
+        "dt(w-2)",
+        "dt(w-3)",
+        "dt(t-1)",
+        "dt(t-2)",
+        "dt(n-1)",
+        "dt(n-2)",
+        "dt(n-3)",
+    ]
+] = df[
+    [
+        "dt(w-1)",
+        "dt(w-2)",
+        "dt(w-3)",
+        "dt(t-1)",
+        "dt(t-2)",
+        "dt(n-1)",
+        "dt(n-2)",
+        "dt(n-3)",
+    ]
+].apply(
+    pd.Series.round
+)
+
+filename = "bus_stop_times_feature_added_new.csv"
+data.to_csv(filename, encoding="utf-8-sig", index=False)
 
 # train = df[df['week_no']<20]
 # test = df[df['week_no']>19]
@@ -192,7 +294,7 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 # from sklearn import linear_model
 # lr = linear_model.LinearRegression()
 # scores = cross_val_score(lr, X, y, scoring='r2', cv=KFold(n_splits=10,shuffle=False )) # shuffle=False
-# rmse = cross_val_score(lr, X, y, scoring='neg_mean_squared_error', cv=KFold(n_splits=10,shuffle=False)) # 
+# rmse = cross_val_score(lr, X, y, scoring='neg_mean_squared_error', cv=KFold(n_splits=10,shuffle=False)) #
 # rmse = np.sqrt(list(-rmse))
 # lr_r2 = scores.mean()
 # lr_rmse = rmse.mean()
@@ -213,8 +315,8 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 
 # from sklearn.tree import DecisionTreeRegressor
 # dt = DecisionTreeRegressor(random_state=0)
-# scores = cross_val_score(dt, X, y, scoring='r2', cv=KFold(n_splits=5,shuffle=False)) 
-# rmse = cross_val_score(dt, X, y, scoring='neg_mean_squared_error', cv=KFold(n_splits=5,shuffle=False)) 
+# scores = cross_val_score(dt, X, y, scoring='r2', cv=KFold(n_splits=5,shuffle=False))
+# rmse = cross_val_score(dt, X, y, scoring='neg_mean_squared_error', cv=KFold(n_splits=5,shuffle=False))
 # rmse = np.sqrt(list(-rmse))
 # dt_r2 = scores.mean()
 # dt_rmse = rmse.mean()
@@ -224,8 +326,8 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 
 # from sklearn.ensemble import RandomForestRegressor
 # rfr = RandomForestRegressor(n_estimators = 100,max_depth = 5, random_state = 42)
-# scores = cross_val_score(rfr, X, y, scoring='r2', cv=KFold(n_splits=5,shuffle=False)) #, 
-# rmse = cross_val_score(rfr, X, y, scoring='neg_mean_squared_error', cv=KFold(n_splits=5,shuffle=False)) #, 
+# scores = cross_val_score(rfr, X, y, scoring='r2', cv=KFold(n_splits=5,shuffle=False)) #,
+# rmse = cross_val_score(rfr, X, y, scoring='neg_mean_squared_error', cv=KFold(n_splits=5,shuffle=False)) #,
 # rmse = np.sqrt(list(-rmse))
 # rfr_r2 = scores.mean()
 # rfr_rmse = rmse.mean()
@@ -277,7 +379,7 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 #                 square=True, linewidths=.5, annot=True, cbar_kws={"shrink": .70}
 #                 )
 #     plt.show();
-    
+
 # correlation_heatmap(X[feature_names])
 
 # !pip install boruta
@@ -318,9 +420,9 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 
 # from catboost import Pool, CatBoostRegressor
 
-# cbr = CatBoostRegressor(iterations=2, 
-#                           depth=2, 
-#                           learning_rate=1, 
+# cbr = CatBoostRegressor(iterations=2,
+#                           depth=2,
+#                           learning_rate=1,
 #                           loss_function='RMSE')
 
 # scores = cross_val_score(cbr, X, y, scoring='r2', cv=KFold(n_splits=4, shuffle=False))
@@ -346,7 +448,7 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 #     'bagging_freq': 10,
 #     'verbose': 0,
 #     "max_depth": 8,
-#     "num_leaves": 128,  
+#     "num_leaves": 128,
 #     "max_bin": 512,
 #     "num_iterations": 100000
 # }
@@ -362,26 +464,9 @@ data.to_csv(filename, encoding='utf-8-sig', index=False)
 # print('lgb_rmse =' + str(lgb_rmse))
 
 
-
-
-
-
-
 # df = stop_times.append([trip_ends])
-
-
-
-
-
-
-
-
-
 
 
 # df['direction'] = df.groupby('trip_id')['direction'].ffill().bfill()
 
 # df
-
-
-

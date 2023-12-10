@@ -14,7 +14,7 @@ class Dataset:
     def __init__(
         self,
         path: str,
-        file_format: DatasetFileFormat = DatasetFileFormat.CSV
+        file_format: DatasetFileFormat = DatasetFileFormat.CSV,
     ) -> None:
         self._path = path
         self._file_format = file_format
@@ -51,10 +51,18 @@ class Dataset:
         return None
 
 
-Bus654RunningTimes = Dataset(
+BUS_654_RUNNING_TIMES = Dataset(
     path="src/datasets/_datasets/bus_running_times_654.csv",
 )
 
-Bus654DwellTimes = Dataset(
+BUS_654_DWELL_TIMES = Dataset(
     path="src/datasets/_datasets/bus_dwell_times_654.csv",
+)
+
+BUS_654_FEATURES_ADDED_RUNNING_TIMES = Dataset(
+    path="src/datasets/_datasets/bus_running_times_feature_added_all.csv",
+)
+
+BUS_654_FEATURES_ADDED_DWELL_TIMES = Dataset(
+    path="src/datasets/_datasets/bus_stop_times_feature_added_all.csv",
 )

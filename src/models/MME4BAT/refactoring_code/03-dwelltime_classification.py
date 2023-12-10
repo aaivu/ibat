@@ -22,23 +22,25 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import GridSearchCV
 
 
-path= './cleaned/data/bus_stop_times_feature_added_all.csv'
+path = "./cleaned/data/bus_stop_times_feature_added_all.csv"
 df = pd.read_csv(path)
 
+
 def condition(x):
-  if x == 0:
-    return 0
-  else:
-    return 1
+    if x == 0:
+        return 0
+    else:
+        return 1
 
-df['dwell/pass'] = df['dwell_time_in_seconds'].apply(condition)
 
-test = df[df['week_no'] >= 16]
-train = df[df['week_no'] < 16]
+df["dwell/pass"] = df["dwell_time_in_seconds"].apply(condition)
+
+test = df[df["week_no"] >= 16]
+train = df[df["week_no"] < 16]
 
 test.reset_index(drop=True, inplace=True)
 
-xgb =  xgb.XGBClassifier()
+xgb = xgb.XGBClassifier()
 
 # Xtrain = train[['deviceid','bus_stop','day_of_week', 'Sunday/holiday', 'saturday','time_of_day','dt(w-1)', 'dt(w-2)', 'dt(w-3)', 'dt(t-1)','dt(t-2)', 'dt(n-1)', 'dt(n-2)', 'dt(n-3)','temp', 'precip','rt(n-1)']]
 # ytrain = train[['dwell/pass']]
@@ -46,21 +48,49 @@ xgb =  xgb.XGBClassifier()
 # Xtest = test[['deviceid','bus_stop','day_of_week', 'Sunday/holiday', 'saturday','time_of_day','dt(w-1)', 'dt(w-2)', 'dt(w-3)', 'dt(t-1)','dt(t-2)', 'dt(n-1)', 'dt(n-2)', 'dt(n-3)','temp', 'precip','rt(n-1)']]
 # ytest = test[['dwell/pass']]
 
-Xtrain = train[['deviceid','bus_stop','day_of_week', 'time_of_day','dt(w-1)', 'dt(w-2)', 'dt(w-3)', 'dt(t-1)','dt(t-2)', 'dt(n-1)', 'dt(n-2)']]
-ytrain = train[['dwell/pass']]
+Xtrain = train[
+    [
+        "deviceid",
+        "bus_stop",
+        "day_of_week",
+        "time_of_day",
+        "dt(w-1)",
+        "dt(w-2)",
+        "dt(w-3)",
+        "dt(t-1)",
+        "dt(t-2)",
+        "dt(n-1)",
+        "dt(n-2)",
+    ]
+]
+ytrain = train[["dwell/pass"]]
 
-Xtest = test[['deviceid','bus_stop','day_of_week', 'time_of_day','dt(w-1)', 'dt(w-2)', 'dt(w-3)', 'dt(t-1)','dt(t-2)', 'dt(n-1)', 'dt(n-2)']]
-ytest = test[['dwell/pass']]
+Xtest = test[
+    [
+        "deviceid",
+        "bus_stop",
+        "day_of_week",
+        "time_of_day",
+        "dt(w-1)",
+        "dt(w-2)",
+        "dt(w-3)",
+        "dt(t-1)",
+        "dt(t-2)",
+        "dt(n-1)",
+        "dt(n-2)",
+    ]
+]
+ytest = test[["dwell/pass"]]
 
 xgb.fit(Xtrain, ytrain)
-pred_xg = xgb.predict(Xtest) 
+pred_xg = xgb.predict(Xtest)
 
 print(f"accuracy_score: {accuracy_score(ytest, pred_xg)}")
 print(f"f1_score: {f1_score(ytest, pred_xg)}")
 
 print(confusion_matrix(ytest, pred_xg))
 
-# pred_xgt = xgb.predict(Xtrain) 
+# pred_xgt = xgb.predict(Xtrain)
 
 # accuracy_score(ytrain, pred_xgt)
 
@@ -85,16 +115,16 @@ print(confusion_matrix(ytest, pred_xg))
 # ytest = test_r[['dwell_time_in_seconds']]
 
 # xgb.fit(Xtrain,ytrain)
-# pred_xg_r = xgb.predict(Xtest) 
-# rmse = np.sqrt(mean_squared_error(ytest, pred_xg_r)) 
+# pred_xg_r = xgb.predict(Xtest)
+# rmse = np.sqrt(mean_squared_error(ytest, pred_xg_r))
 
 # print("RMSE (1): %f" % (rmse))
 
 # mape = mean_absolute_percentage_error(ytest, pred_xg_r)
-# print("MAPE (1): %f" % (mape)) 
+# print("MAPE (1): %f" % (mape))
 
 # mae = mean_absolute_error(ytest, pred_xg_r)
-# print("MAE (1): %f" % (mae)) 
+# print("MAE (1): %f" % (mae))
 
 
 # r2 = r2_score(ytest, pred_xg_r)
@@ -124,15 +154,15 @@ print(confusion_matrix(ytest, pred_xg))
 
 # pred_dwell
 
-# rmse = np.sqrt(mean_squared_error(pred_dwell['dwell_time_in_seconds'], pred_dwell['XGBoost_class'])) 
+# rmse = np.sqrt(mean_squared_error(pred_dwell['dwell_time_in_seconds'], pred_dwell['XGBoost_class']))
 
 # print("RMSE (1): %f" % (rmse))
 
 # mape = mean_absolute_percentage_error(pred_dwell['dwell_time_in_seconds'], pred_dwell['XGBoost_class'])
-# print("MAPE (1): %f" % (mape)) 
+# print("MAPE (1): %f" % (mape))
 
 # mae = mean_absolute_error(pred_dwell['dwell_time_in_seconds'], pred_dwell['XGBoost_class'])
-# print("MAE (1): %f" % (mae)) 
+# print("MAE (1): %f" % (mae))
 
 
 # r2 = r2_score(pred_dwell['dwell_time_in_seconds'], pred_dwell['XGBoost_class'])
@@ -181,7 +211,7 @@ print(confusion_matrix(ytest, pred_xg))
 # knn = KNeighborsClassifier()
 
 # knn.fit(Xtrain,ytrain)
-# pred_knn = knn.predict(Xtest) 
+# pred_knn = knn.predict(Xtest)
 
 # accuracy_score(ytest, pred_knn)
 
