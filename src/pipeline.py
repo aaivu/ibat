@@ -20,12 +20,48 @@ def run() -> None:
     dt_df = dt_df.loc[dt_df["date"] < cutoff_date]
     dt_df["week_no"] = dt_df["date"].dt.isocalendar().week
     dt_df["day_of_week"] = dt_df["date"].dt.weekday
-    dt_df["time_of_day"] = to_datetime(
-        dt_df["arrival_time"], format="%H:%M:%S"
-    ).apply(lambda x: (x.hour * 60 + x.minute) // 15)
+    dt_df["time_of_day"] = to_datetime(dt_df["arrival_time"], format="%H:%M:%S").apply(
+        lambda x: (x.hour * 60 + x.minute) // 15
+    )
 
-    old = [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 1, 2, 3, 4, 5,
-           6, 7, 8, 9, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]
+    old = [
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+    ]
     new = list(range(1, 37))
     d = dict(zip(old, new))
     dt_df["week_no"] = list(map(lambda x: d[x], dt_df["week_no"]))
@@ -47,8 +83,10 @@ def run() -> None:
     dt_df = dt_df[:2000]
     from_idx = 0
     for to_idx in range(1000, len(dt_df), 100):
-        dt_chunk: DataFrame = dt_df.iloc[from_idx: to_idx, :].reset_index(drop=True)
-        dt_x: DataFrame = dt_chunk[["deviceid", "bus_stop", "day_of_week", "time_of_day"]]
+        dt_chunk: DataFrame = dt_df.iloc[from_idx:to_idx, :].reset_index(drop=True)
+        dt_x: DataFrame = dt_chunk[
+            ["deviceid", "bus_stop", "day_of_week", "time_of_day"]
+        ]
         dt_y: DataFrame = dt_chunk[["dwell_time_in_seconds"]]
 
         if not model:
@@ -66,7 +104,9 @@ def run() -> None:
                 model.predict(rt_x=None, dt_x=dt_x)["prediction"].tolist()
             )
 
-            model.incremental_fit(ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y)
+            model.incremental_fit(
+                ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
+            )
 
         # dt_next_chunk = dt_df.iloc[to_idx: (to_idx + 10), :]
         # dt_x = dt_next_chunk[["deviceid", "bus_stop", "day_of_week", "time_of_day"]]
@@ -74,17 +114,29 @@ def run() -> None:
 
         from_idx = to_idx
 
-    print(f"MAE for base model: {mean_absolute_error(true_prediction, base_model_prediction)}")
-    print(f"MAPE for base model: {mean_absolute_percentage_error(true_prediction, base_model_prediction) * 100}")
-    print(f"RMSE for base model: {mean_squared_error(true_prediction, base_model_prediction, squared=False)}")
+    print(
+        f"MAE for base model: {mean_absolute_error(true_prediction, base_model_prediction)}"
+    )
+    print(
+        f"MAPE for base model: {mean_absolute_percentage_error(true_prediction, base_model_prediction) * 100}"
+    )
+    print(
+        f"RMSE for base model: {mean_squared_error(true_prediction, base_model_prediction, squared=False)}"
+    )
 
-    print(f"MAE for incremental online learning model: {mean_absolute_error(true_prediction, model_prediction)}")
-    print(f"""MAPE for incremental online learning model: {
+    print(
+        f"MAE for incremental online learning model: {mean_absolute_error(true_prediction, model_prediction)}"
+    )
+    print(
+        f"""MAPE for incremental online learning model: {
         mean_absolute_percentage_error(true_prediction, model_prediction) * 100
-    }""")
-    print(f"""RMSE for incremental online learning model: {
+    }"""
+    )
+    print(
+        f"""RMSE for incremental online learning model: {
         mean_squared_error(true_prediction, model_prediction, squared=False)
-    }""")
+    }"""
+    )
 
     plt.figure(figsize=(100, 20))
 

@@ -14,7 +14,7 @@ class Dataset:
     def __init__(
         self,
         path: str,
-        file_format: DatasetFileFormat = DatasetFileFormat.CSV
+        file_format: DatasetFileFormat = DatasetFileFormat.CSV,
     ) -> None:
         self._path = path
         self._file_format = file_format
