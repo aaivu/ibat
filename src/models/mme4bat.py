@@ -1,5 +1,3 @@
-from numpy import zeros
-from pandas import DataFrame
 from src.models._base_models.xgboost import XGBClassifier, XGBRegressor
 
 
@@ -39,7 +37,9 @@ class MME4BAT:
         dt_y_gt_0 = self.xgb_dt_regressor.predict(dt_x_gt_0)
 
         dt_y = is_dt_gt_0.copy()
-        dt_y.loc[dt_y["prediction"] > 0, "prediction"] = dt_y_gt_0["prediction"].to_numpy()
+        dt_y.loc[dt_y["prediction"] > 0, "prediction"] = dt_y_gt_0[
+            "prediction"
+        ].to_numpy()
         dt_y.loc[dt_y["prediction"] < 0, "prediction"] = 0
 
         return dt_y
