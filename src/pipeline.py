@@ -1,5 +1,5 @@
 import warnings
-from typing import Optional
+from typing import Optional, List
 
 import matplotlib.pyplot as plt
 from pandas import DataFrame, to_datetime
@@ -9,73 +9,21 @@ from sklearn.metrics import (
     mean_absolute_percentage_error,
     mean_squared_error,
 )
-from src.datasets import BUS_654_DWELL_TIMES, BUS_654_RUNNING_TIMES
-from src.models.mme4bat import MME4BAT
+from src.datasets import (
+    BUS_654_FEATURES_ADDED_DWELL_TIMES,
+    BUS_654_FEATURES_ADDED_RUNNING_TIMES,
+)
+from src.models.use_cases.arrival_time.bus import MME4BAT
 
 
 def run() -> None:
     warnings.filterwarnings("ignore", category=SettingWithCopyWarning)
 
-    rt_df: DataFrame = BUS_654_RUNNING_TIMES.dataframe
-    dt_df: DataFrame = BUS_654_DWELL_TIMES.dataframe
+    rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
+    dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
 
-    dt_df["date"] = to_datetime(dt_df["date"])
-    cutoff_date = to_datetime("2022-09-26")
-    dt_df = dt_df.loc[dt_df["date"] < cutoff_date]
-    dt_df["week_no"] = dt_df["date"].dt.isocalendar().week
-    dt_df["day_of_week"] = dt_df["date"].dt.weekday
-    dt_df["time_of_day"] = to_datetime(dt_df["arrival_time"], format="%H:%M:%S").apply(
-        lambda x: (x.hour * 60 + x.minute) // 15
-    )
-
-    old = [
-        39,
-        40,
-        41,
-        42,
-        43,
-        44,
-        45,
-        46,
-        47,
-        48,
-        49,
-        50,
-        51,
-        52,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-    ]
-    new = list(range(1, 37))
-    d = dict(zip(old, new))
-    dt_df["week_no"] = list(map(lambda x: d[x], dt_df["week_no"]))
-
-    dt_df = dt_df[dt_df["direction"] == 1]
-    dt_df = dt_df.drop(dt_df[dt_df["dwell_time_in_seconds"] > 600].index)
-
-    dt_df.sort_values(["trip_id", "bus_stop"], inplace=True)
-    dt_df.reset_index(drop=True, inplace=True)
-    dt_df.to_csv("del.csv")
+    rt_df = rt_df.select_dtypes(include='number')
+    dt_df = dt_df.select_dtypes(include='number')
 
     base_model: Optional[MME4BAT] = None
     model: Optional[MME4BAT] = None
@@ -88,9 +36,7 @@ def run() -> None:
     from_idx = 0
     for to_idx in range(1000, len(dt_df), 100):
         dt_chunk: DataFrame = dt_df.iloc[from_idx:to_idx, :].reset_index(drop=True)
-        dt_x: DataFrame = dt_chunk[
-            ["deviceid", "bus_stop", "day_of_week", "time_of_day"]
-        ]
+        dt_x: DataFrame = dt_chunk.drop(columns=["dwell_time_in_seconds"])
         dt_y: DataFrame = dt_chunk[["dwell_time_in_seconds"]]
 
         if not model:
