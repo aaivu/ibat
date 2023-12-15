@@ -1,3 +1,9 @@
 black
 flake8
+numpy
+pandas
+matplotlib
+scikit-learn
+xgboost
 torch
+river

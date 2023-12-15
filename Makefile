@@ -9,6 +9,7 @@ setup: venv
 .PHONY: format
 format:
 	./venv/bin/black ./src
+	./venv/bin/black ./examples
 
 .PHONY: lint
 lint:
