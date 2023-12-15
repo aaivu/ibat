@@ -10,7 +10,7 @@ stream = np.array(list(sorted_mean_arrival_time["arrival_time_in_seconds"]))
 
 strategy = PageHinkley(threshold=6500)
 
-cdd = CDD(strategy)
+cdd = CDD(strategy=strategy)
 
 is_detected = cdd.is_concept_drift_detected(None, stream, None)
 
