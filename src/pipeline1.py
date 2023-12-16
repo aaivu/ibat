@@ -33,14 +33,15 @@ def plot_mean_dwell_time(bus_stop_value, start, end, df, folder_path):
     x = df_model_prediction['date']
 
     plt.plot(x, df_dwell_time_in_seconds['dwell_time_in_seconds'], label="True dwell time", marker='o', linestyle='-')
-    plt.plot(x, df_base_model_prediction['base_model_prediction'], label="Base model prediction", marker='o', linestyle='-')
-    plt.plot(x, df_model_prediction['model_prediction'], label="Prediction with incremental online learning", marker='o', linestyle='-')
+    plt.plot(x, df_base_model_prediction['base_model_prediction'], label="Base model prediction", marker='o', linestyle='--')
+    plt.plot(x, df_model_prediction['model_prediction'], label="Prediction with incremental online learning", marker='o', linestyle='--')
 
     plt.xlabel('Date')
     plt.ylabel('Mean Dwell Time')
     plt.title(f'Mean dwell time at the bus stop {bus_stop_value} on each day at [{start} - {end}) h')
     plt.xticks(rotation=45)
     plt.grid(True)
+    plt.legend()
     plt.tight_layout()
     file_name = f'd{bus_stop_value}.png'  
     save_path = f'{folder_path}/{file_name}'
@@ -146,7 +147,7 @@ def run() -> None:
     plt.title("Multiple Lines on a Common Graph")
 
     plt.legend()
-    plt.show()
+    # plt.show()
     plt.savefig("dt.png", dpi=150)
 
 
