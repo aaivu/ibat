@@ -32,8 +32,8 @@ def run() -> None:
     base_model_prediction = []
     model_prediction = []
 
-    dt_df = dt_df[:10000]
-    numeric_dt_df = numeric_dt_df[:10000]
+    # dt_df = dt_df[:10000]
+    # numeric_dt_df = numeric_dt_df[:10000]
 
     from_idx = 0
     for to_idx in range(1000, len(numeric_dt_df), 100):
@@ -92,7 +92,8 @@ def run() -> None:
     }"""
     )
 
-    dt_pred_df = dt_df[1000:-100]
+    # dt_pred_df = dt_df[1000:-100]
+    dt_pred_df = dt_df[1000:-83]
     if (
         len(dt_pred_df)
         == len(true_prediction)
@@ -127,7 +128,7 @@ def run() -> None:
 
     time_of_day = 10
     starting_time = Timestamp("10:00:00").time()
-    ending_time = Timestamp("11:00:00").time()
+    ending_time = Timestamp("10:15:00").time()
 
     folder_path = "../experiments"
 
