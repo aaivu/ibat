@@ -66,8 +66,8 @@ def run() -> None:
     base_model_prediction = []
     model_prediction = []
 
-    numerical_dt_df = numerical_dt_df[:5000]
-    dt_df = dt_df[:5000]
+    numerical_dt_df = numerical_dt_df[:10000]
+    dt_df = dt_df[:10000]
     from_idx = 0
 
     for to_idx in range(1000, len(numerical_dt_df), 100):
@@ -166,9 +166,7 @@ def run() -> None:
     df['arrival_time'] = pd.to_datetime(df['arrival_time'])
     df['time_of_day'] = df['arrival_time'].dt.hour
 
-    # bus_stop_list = df['bus_stop'].unique()
-    # [110, 101, 104, , 105]                                     # Error Bus stop Values
-    bus_stop_list = [108, 109, 111, 112, 113, 114, 102, 103, 106, 107]
+    bus_stop_list = df['bus_stop'].unique()
     for bus_stop_value in bus_stop_list:          
         filtered_df = df[(df['direction'] == direction_value) & (df['bus_stop'] == bus_stop_value) & (df['time_of_day'] == time_of_day_value)]
         filtered_df['date'] = pd.to_datetime(filtered_df['date'])
