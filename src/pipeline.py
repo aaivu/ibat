@@ -320,7 +320,7 @@ def export_mean_dt_plot_as_image(
     plt.xlabel("Date")
     plt.ylabel("Mean dwell time (s)")
     plt.title(
-        f"The mean dwell time at bus stop {bus_stop} for each day between {starting_time} and {ending_time}."
+        f"The mean dwell time at bus stop {bus_stop} for each day between {starting_time.time()} and {ending_time.time()}."
     )
     plt.xticks(rotation=45)
     plt.grid(True)
