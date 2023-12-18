@@ -24,7 +24,7 @@ def run_exp(
     stream_start: datetime,
     stream_end: datetime,
     interval_min: float,
-    output_parent_dir: str,
+    output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
 ) -> None:
     """

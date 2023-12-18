@@ -10,8 +10,8 @@ if __name__ == "__main__":
     historical_data_starting_from = datetime_from_string("2021-10-01")
     historical_data_ending_at = datetime_from_string("2021-10-10")
     streaming_data_starting_from = datetime_from_string("2021-10-10")
-    streaming_data_ending_at = datetime_from_string("2022-01-01")
-    time_interval = 15
+    streaming_data_ending_at = datetime_from_string("2022-11-01")
+    time_interval = 60
     folder_path_to_save_result = "../experiments"
     experiment_label = "m-xgb-s-xgb_model"
 
