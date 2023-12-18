@@ -1,18 +1,20 @@
 name: Check PR Title
+
 on:
-    pull_request_target:
-        types:
-            - opened
-            - reopened
-            - edited
-            - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+
 jobs:
-    check:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: aslafy-z/conventional-pr-title-action@v3
-              with:
-                  success-state: "PR title is valid"
-                  failure-state: "PR title doesn't follow the conventional commits style"
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aslafy-z/conventional-pr-title-action@v3
+        with:
+          success-state: "PR title is valid"
+          failure-state: "PR title doesn't follow the conventional commits style"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
