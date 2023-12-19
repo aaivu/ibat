@@ -3,6 +3,7 @@ import warnings
 from datetime import datetime, timedelta
 from typing import Optional
 
+import pandas as pd
 import matplotlib.pyplot as plt
 from pandas import concat, DataFrame, to_datetime
 from pandas.errors import SettingWithCopyWarning
@@ -24,6 +25,7 @@ def run_exp(
     stream_start: datetime,
     stream_end: datetime,
     interval_min: float,
+    isActive: bool,
     output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
 ) -> None:
@@ -36,6 +38,7 @@ def run_exp(
         stream_start: Start timestamp (inclusive) for streaming data.
         stream_end: End timestamp (exclusive) for streaming data.
         interval_min: Time interval (in minutes) for data processing.
+        isActive: Active strategy or passive strategy.
         output_parent_dir: Parent directory's path to save experiment results.
         label: Experiment label (default is an empty string).
 
@@ -64,6 +67,10 @@ def run_exp(
 
     from_date_time = hist_start
     to_date_time = hist_end
+
+    buffer_dt_x = pd.DataFrame()
+    buffer_dt_y = pd.DataFrame()
+    isConceptDriftDetected = True
 
     while from_date_time < stream_end:
         print(
@@ -114,9 +121,29 @@ def run_exp(
 
             result_dt_df = concat([result_dt_df, dt_chunk], ignore_index=True)
 
-            model.incremental_fit(
-                ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
-            )
+            # model.incremental_fit(
+            #     ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
+            # )
+            if (isActive):
+
+                if(isConceptDriftDetected):
+                    buffer_dt_x = pd.concat([buffer_dt_x,dt_x], ignore_index=True)
+                    buffer_dt_y = pd.concat([buffer_dt_y,dt_y], ignore_index=True)
+                    print(len(buffer_dt_x))
+                    
+                else:
+                    model.incremental_fit(
+                        ni_rt_x=None, ni_rt_y=None, ni_dt_x=buffer_dt_x, ni_dt_y=buffer_dt_y
+                    )
+
+                    buffer_dt_x = buffer_dt_x.drop(buffer_dt_x.index)
+                    buffer_dt_y = buffer_dt_y.drop(buffer_dt_y.index)
+
+
+            else:
+                model.incremental_fit(
+                    ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
+                )
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(

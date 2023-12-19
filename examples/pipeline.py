@@ -12,6 +12,7 @@ if __name__ == "__main__":
     streaming_data_starting_from = datetime_from_string("2021-10-10")
     streaming_data_ending_at = datetime_from_string("2022-11-01")
     time_interval = 60
+    isActive = 'True'
     folder_path_to_save_result = "../experiments"
     experiment_label = "m-xgb-s-xgb_model"
 
@@ -21,6 +22,7 @@ if __name__ == "__main__":
         stream_start=streaming_data_starting_from,
         stream_end=streaming_data_ending_at,
         interval_min=time_interval,
+        isActive=isActive,
         output_parent_dir=folder_path_to_save_result,
         label=experiment_label,
     )
