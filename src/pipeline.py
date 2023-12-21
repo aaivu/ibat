@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from pandas import concat, DataFrame, to_datetime
 from pandas.errors import SettingWithCopyWarning
@@ -12,12 +13,15 @@ from sklearn.metrics import (
     mean_absolute_percentage_error,
     mean_squared_error,
 )
+from sklearn.pipeline import Pipeline
+from xgboost import XGBRegressor
 from src.datasets import (
     BUS_654_FEATURES_ADDED_DWELL_TIMES,
     BUS_654_FEATURES_ADDED_RUNNING_TIMES,
 )
 from src.models.use_cases.arrival_time.bus import MME4BAT
-
+from src.concept_drift_detector import CDD
+from src.concept_drift_detector.strategies import IStrategy
 
 def run_exp(
     hist_start: datetime,
@@ -26,6 +30,7 @@ def run_exp(
     stream_end: datetime,
     interval_min: float,
     isActive: bool,
+    cdd_strategy: IStrategy,
     output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
 ) -> None:
@@ -99,9 +104,11 @@ def run_exp(
         if not model:
             base_model = MME4BAT()
             model = MME4BAT()
+            pipeline = Pipeline([("model", XGBRegressor(objective="reg:squarederror"))])
 
             base_model.fit(rt_x=None, rt_y=None, dt_x=dt_x, dt_y=dt_y)
             model.fit(rt_x=None, rt_y=None, dt_x=dt_x, dt_y=dt_y)
+            pipeline.fit(X=dt_x, y=dt_y)
         else:
             true_prediction = dt_y["dwell_time_in_seconds"].tolist()
             base_model_prediction = base_model.predict(rt_x=None, dt_x=dt_x)[
@@ -121,25 +128,25 @@ def run_exp(
 
             result_dt_df = concat([result_dt_df, dt_chunk], ignore_index=True)
 
-            # model.incremental_fit(
-            #     ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
-            # )
             if (isActive):
+                cdd = CDD(strategy=cdd_strategy)
+                is_detected = cdd.is_concept_drift_detected(pipeline, dt_x, dt_y['dwell_time_in_seconds'])
 
-                if(isConceptDriftDetected):
+                # cdd = CDD(strategy=cdd_strategy)
+                # stream = np.array(list(dt_y['dwell_time_in_seconds']))
+                # is_detected = cdd.is_concept_drift_detected(None, stream, None)
+
+                if(is_detected):
+                    model.incremental_fit(
+                            ni_rt_x=None, ni_rt_y=None, ni_dt_x=buffer_dt_x, ni_dt_y=buffer_dt_y
+                    )
+                    del buffer_dt_x, buffer_dt_y
+                else:
+                    if ('buffer_dt_x' in locals() and isinstance(buffer_dt_x, pd.DataFrame) ): 
+                        buffer_dt_x = pd.DataFrame()
+                        buffer_dt_y  = pd.DataFrame()
                     buffer_dt_x = pd.concat([buffer_dt_x,dt_x], ignore_index=True)
                     buffer_dt_y = pd.concat([buffer_dt_y,dt_y], ignore_index=True)
-                    print(len(buffer_dt_x))
-                    
-                else:
-                    model.incremental_fit(
-                        ni_rt_x=None, ni_rt_y=None, ni_dt_x=buffer_dt_x, ni_dt_y=buffer_dt_y
-                    )
-
-                    buffer_dt_x = buffer_dt_x.drop(buffer_dt_x.index)
-                    buffer_dt_y = buffer_dt_y.drop(buffer_dt_y.index)
-
-
             else:
                 model.incremental_fit(
                     ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
