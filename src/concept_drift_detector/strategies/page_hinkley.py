@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from river.drift import PageHinkley as rPageHinkley
 from matplotlib import gridspec, pyplot as plt
 from src.concept_drift_detector.strategies.istrategy import IStrategy
@@ -22,6 +24,11 @@ class PageHinkley(IStrategy):
         plot_data(ni_x, drifts)
 
         return is_detected
+
+    def get_attributes(self) -> Dict[str, Any]:
+        return {
+            "Threshold": self._threshold,
+        }
 
 
 def plot_data(stream, drifts=None):

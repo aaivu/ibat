@@ -37,9 +37,9 @@ X_test = test.drop(
     ]
 )
 
-y_train = train["arrival_time_in_seconds"]
+y_train = train[["arrival_time_in_seconds"]]
 
-y_test = test["arrival_time_in_seconds"]
+y_test = test[["arrival_time_in_seconds"]]
 
 pipeline = Pipeline([("model", XGBRegressor(objective="reg:squarederror"))])
 

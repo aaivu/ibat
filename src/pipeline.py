@@ -11,6 +11,7 @@ from sklearn.metrics import (
     mean_absolute_percentage_error,
     mean_squared_error,
 )
+from src.concept_drift_detector.strategies import IStrategy
 from src.datasets import (
     BUS_654_FEATURES_ADDED_DWELL_TIMES,
     BUS_654_FEATURES_ADDED_RUNNING_TIMES,
@@ -24,6 +25,8 @@ def run_exp(
     stream_start: datetime,
     stream_end: datetime,
     interval_min: float,
+    active_strategy: Optional[bool] = False,
+    cdd_strategy: Optional[IStrategy] = None,
     output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
 ) -> None:
@@ -36,14 +39,18 @@ def run_exp(
         stream_start: Start timestamp (inclusive) for streaming data.
         stream_end: End timestamp (exclusive) for streaming data.
         interval_min: Time interval (in minutes) for data processing.
+        active_strategy: Flag indicating whether to use active strategy (default is False).
+        cdd_strategy: Strategy to be used for detecting concept drift. Required if active_strategy is True.
         output_parent_dir: Parent directory's path to save experiment results.
         label: Experiment label (default is an empty string).
 
     Returns:
         None
     """
-
     warnings.filterwarnings("ignore", category=SettingWithCopyWarning)
+
+    if active_strategy and cdd_strategy is None:
+        raise ValueError("cdd_strategy must be provided when active_strategy is True.")
 
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
     dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
@@ -62,12 +69,15 @@ def run_exp(
     base_model_predictions = []
     model_predictions = []
 
+    dt_x_buffer: Optional[DataFrame] = None
+    dt_y_buffer: Optional[DataFrame] = None
+
     from_date_time = hist_start
     to_date_time = hist_end
 
     while from_date_time < stream_end:
         print(
-            f"\rDATA STREAMING: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
+            f"DATA STREAM: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
             end="",
             flush=True,
         )
@@ -82,6 +92,7 @@ def run_exp(
         to_date_time = from_date_time + timedelta(minutes=interval_min)
 
         if len(dt_chunk) == 0:
+            print(" | NO INSTANCES")
             continue
 
         numeric_dt_chunk = dt_chunk.select_dtypes(include="number")
@@ -91,10 +102,12 @@ def run_exp(
 
         if not model:
             base_model = MME4BAT()
-            model = MME4BAT()
+            model = MME4BAT(cdd_strategy=cdd_strategy)
 
             base_model.fit(rt_x=None, rt_y=None, dt_x=dt_x, dt_y=dt_y)
             model.fit(rt_x=None, rt_y=None, dt_x=dt_x, dt_y=dt_y)
+
+            print(" | MODEL INITIATED")
         else:
             true_prediction = dt_y["dwell_time_in_seconds"].tolist()
             base_model_prediction = base_model.predict(rt_x=None, dt_x=dt_x)[
@@ -114,9 +127,30 @@ def run_exp(
 
             result_dt_df = concat([result_dt_df, dt_chunk], ignore_index=True)
 
-            model.incremental_fit(
-                ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
-            )
+            if active_strategy:
+                if (dt_x_buffer is None) or (dt_y_buffer is None):
+                    dt_x_buffer = dt_x
+                    dt_y_buffer = dt_y
+                else:
+                    dt_x_buffer = concat([dt_x_buffer, dt_x], ignore_index=True)
+                    dt_y_buffer = concat([dt_y_buffer, dt_y], ignore_index=True)
+
+                is_detected = model.is_concept_drift_detected(
+                    ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
+                )
+                if is_detected:
+                    model.incremental_fit(
+                        ni_rt_x=None,
+                        ni_rt_y=None,
+                        ni_dt_x=dt_x_buffer,
+                        ni_dt_y=dt_y_buffer,
+                    )
+                    dt_x_buffer = None
+                    dt_y_buffer = None
+            else:
+                model.incremental_fit(
+                    ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
+                )
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(
@@ -124,6 +158,14 @@ def run_exp(
         end="",
         flush=True,
     )
+
+    cdd_strategy_content = ""
+    if active_strategy:
+        cdd_strategy_content = f"- {cdd_strategy.__class__.__name__}:\n\n"
+        cdd_strategy_content += f"| Attribute | Value |\n|---|---|\n"
+
+        for attr, value in cdd_strategy.get_attributes().items():
+            cdd_strategy_content += f"| {attr} | {value} |\n"
 
     md_file_content = f"""
 # Experiment: {label}
@@ -134,6 +176,9 @@ def run_exp(
 - Streaming data starting from: {stream_start}
 - Streaming data ending at: {stream_end}
 - Time interval: {interval_min}
+- Concept drift detection strategy: {"ACTIVE" if active_strategy else "PASSIVE"}
+- Concept drift detection algorithm: {cdd_strategy.__class__.__name__ if active_strategy else None}
+{cdd_strategy_content}
 
 ## Results
 ### Model Performance Metrics

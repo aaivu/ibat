@@ -1,12 +1,25 @@
+from copy import deepcopy
+from typing import Optional
+
+from src.concept_drift_detector import CDD
+from src.concept_drift_detector.strategies import IStrategy
 from src.models._base_models.xgboost import XGBClassifier, XGBRegressor
 
 
 class MME4BAT:
-    def __init__(self):
+    def __init__(self, cdd_strategy: Optional[IStrategy] = None) -> None:
         # self.xgb_rt_regressor = XGBRegressor()
 
         self.xgb_dt_classifier = XGBClassifier()
         self.xgb_dt_regressor = XGBRegressor()
+
+        if cdd_strategy:
+            self._cdd_of_xgb_dt_classifier = CDD(
+                strategy=deepcopy(cdd_strategy),
+            )
+            self._cdd_of_xgb_dt_regressor = CDD(
+                strategy=deepcopy(cdd_strategy),
+            )
 
     def fit(self, rt_x, rt_y, dt_x, dt_y) -> None:
         # self.xgb_rt_regressor.fit(rt_x, rt_y)
@@ -43,3 +56,26 @@ class MME4BAT:
         dt_y.loc[dt_y["prediction"] < 0, "prediction"] = 0
 
         return dt_y
+
+    def is_concept_drift_detected(self, ni_rt_x, ni_rt_y, ni_dt_x, ni_dt_y) -> bool:
+        try:
+            is_detected_2 = self._cdd_of_xgb_dt_classifier.is_concept_drift_detected(
+                model=self.xgb_dt_classifier,
+                ni_x=ni_dt_x,
+                ni_y=ni_dt_y,
+            )
+
+            ni_dt_x_gt_0 = ni_dt_x[ni_dt_y.iloc[:, 0] > 0]
+            ni_dt_y_gt_0 = ni_dt_y[ni_dt_y.iloc[:, 0] > 0]
+
+            is_detected_3 = self._cdd_of_xgb_dt_regressor.is_concept_drift_detected(
+                model=self.xgb_dt_regressor,
+                ni_x=ni_dt_x_gt_0,
+                ni_y=ni_dt_y_gt_0,
+            )
+            print(
+                f" | CDD at xgb_dt_classifier: {is_detected_2} | CDD at xgb_dt_regressor: {is_detected_3}"
+            )
+            return is_detected_2 or is_detected_3
+        except NameError as e:
+            raise e
