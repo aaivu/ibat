@@ -10,7 +10,7 @@ class SKLearnBaseModel(IBaseModel):
 
     def fit(self, x, y):
         if self._model is not None:
-            self._model.fit(x, y)
+            self._model.partial_fit(x, y)
         else:
             raise NotImplementedError("Model is Empty. Choose appropriate subclasses")
 
