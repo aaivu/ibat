@@ -15,7 +15,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
 # Create a file handler and set the level to DEBUG
-file_handler = logging.FileHandler('example.log')
+file_handler = logging.FileHandler("example.log")
 file_handler.setLevel(logging.DEBUG)
 
 # Create a formatter and set it for both handlers
@@ -28,8 +28,8 @@ logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
 # Example usage
-logger.debug('This is a debug message')
-logger.info('This is an info message')
-logger.warning('This is a warning message')
-logger.error('This is an error message')
-logger.critical('This is a critical message')
+logger.debug("This is a debug message")
+logger.info("This is an info message")
+logger.warning("This is a warning message")
+logger.error("This is an error message")
+logger.critical("This is a critical message")
