@@ -11,7 +11,7 @@ if __name__ == "__main__":
     historical_data_starting_from = datetime_from_string("2021-10-01")
     historical_data_ending_at = datetime_from_string("2021-10-10")
     streaming_data_starting_from = datetime_from_string("2021-10-10")
-    streaming_data_ending_at = datetime_from_string("2021-11-01")
+    streaming_data_ending_at = datetime_from_string("2022-11-01")
     time_interval = 60
     active_strategy = True
     cdd_strategy = DDM(
