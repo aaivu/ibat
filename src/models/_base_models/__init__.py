@@ -1,5 +1,6 @@
 from . import (  # noqa F401
-    convlstm,
+    ensemble,
+    linear_model,
     ibase_model,
-    xgboost,
+    nn,
 )

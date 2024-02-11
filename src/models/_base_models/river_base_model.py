@@ -1,11 +1,8 @@
-from numpy import ndarray
-from pandas import DataFrame
-from river import linear_model
-from river import preprocessing
+from pandas import DataFrame, Series
 from src.models._base_models.ibase_model import IBaseModel
 
 
-class RiverBaseModelMany(IBaseModel):
+class RiverBatchBaseModel(IBaseModel):
     def __init__(self) -> None:
         self._model = None
         self._params = {}
@@ -23,5 +20,6 @@ class RiverBaseModelMany(IBaseModel):
     def predict(self, x) -> DataFrame:
         if len(x) == 0:
             return DataFrame(columns=["prediction"])
-        y_pred_batch = self._model.predict_many(x)
-        return y_pred_batch.to_frame(name='prediction')
+
+        ser_prediction: Series = self._model.predict_many(x)
+        return ser_prediction.to_frame(name="prediction")
