@@ -11,16 +11,16 @@ if __name__ == "__main__":
     historical_data_starting_from = datetime_from_string("2021-10-01")
     historical_data_ending_at = datetime_from_string("2021-10-10")
     streaming_data_starting_from = datetime_from_string("2021-10-10")
-    streaming_data_ending_at = datetime_from_string("2021-11-01")
+    streaming_data_ending_at = datetime_from_string("2022-11-01")
     time_interval = 60
     active_strategy = True
     cdd_strategy = DDM(
-        warning_level=2,
-        drift_level=3,
-        min_num_instances=5,
+        warning_level=1.5,
+        drift_level=1.77,
+        min_num_instances=2,
     )
     folder_path_to_save_result = "../experiments"
-    experiment_label = "m-xgb-s-xgb_model"
+    experiment_label = "m-xgb-s-xgb_model-d-batch_r2"
 
     run_exp(
         hist_start=historical_data_starting_from,

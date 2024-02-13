@@ -3,7 +3,7 @@ from typing import Optional
 
 from src.concept_drift_detector import CDD
 from src.concept_drift_detector.strategies import IStrategy
-from src.models._base_models.ensemble.xgboost import XGBClassifier, XGBRegressor
+from src.models.base_models.ensemble.xgboost import XGBClassifier, XGBRegressor
 
 
 class MME4BAT:

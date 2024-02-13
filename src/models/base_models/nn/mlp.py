@@ -2,12 +2,13 @@ from sklearn.neural_network import (
     MLPClassifier as ExMLPClassifier,
     MLPRegressor as ExMLPRegressor,
 )
-from src.models._base_models.sklearn_base_model import SKLearnBaseModel
+from src.models.base_models.base_models import SKLearnBaseModel
 
 
 class MLPClassifier(SKLearnBaseModel):
     def __init__(self) -> None:
         super().__init__()
+        self._is_classifier = True
         self._params = {
             "hidden_layer_sizes": (100, 50),
             "random_state": "1",
@@ -18,6 +19,7 @@ class MLPClassifier(SKLearnBaseModel):
 class MLPRegressor(SKLearnBaseModel):
     def __init__(self) -> None:
         super().__init__()
+        self._is_classifier = False
         self._params = {
             "hidden_layer_sizes": (100, 50),
             "activation": "relu",

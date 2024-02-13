@@ -1,10 +1,11 @@
 from sklearn.linear_model import Perceptron
-from src.models._base_models.sklearn_base_model import SKLearnBaseModel
+from src.models.base_models.base_models import SKLearnBaseModel
 
 
 class PerceptronClassifier(SKLearnBaseModel):
     def __init__(self) -> None:
         super().__init__()
+        self._is_classifier = True
         self._params = {
             "max_iter": 1000,
             "random_state": 42,
