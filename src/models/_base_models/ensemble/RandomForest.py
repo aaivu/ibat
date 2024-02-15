@@ -1,4 +1,5 @@
-from river.forest import ARFClassifier
+from river.forest import ARFClassifier, ARFRegressor
+from river import preprocessing
 from src.models._base_models.river_base_model import RiverStreamBaseModel
 
 """
@@ -17,3 +18,13 @@ class AdaptiveRandomForestClassifier(RiverStreamBaseModel):
         super().__init__()
         self._params = {}
         self._model = ARFClassifier(n_models=10)
+
+
+class AdaptiveRandomForestRegressor(RiverStreamBaseModel):
+    def __init__(self) -> None:
+        super().__init__()
+        self._params = {}
+        self._model = (
+                preprocessing.StandardScaler() |
+                ARFRegressor(seed=42)
+        )
