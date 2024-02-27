@@ -20,16 +20,16 @@ from src.models.use_cases.arrival_time.bus import MME4BAT
 
 
 def run_exp(
-        hist_start: datetime,
-        hist_end: datetime,
-        stream_start: datetime,
-        stream_end: datetime,
-        interval_min: Optional[float] = 0,
-        count_min: Optional[int] = 0,
-        active_strategy: Optional[bool] = False,
-        cdd_strategy: Optional[IStrategy] = None,
-        output_parent_dir: Optional[str] = "./",
-        label: Optional[str] = "",
+    hist_start: datetime,
+    hist_end: datetime,
+    stream_start: datetime,
+    stream_end: datetime,
+    interval_min: Optional[float] = 0,
+    count_min: Optional[int] = 0,
+    active_strategy: Optional[bool] = False,
+    cdd_strategy: Optional[IStrategy] = None,
+    output_parent_dir: Optional[str] = "./",
+    label: Optional[str] = "",
 ) -> None:
     """
     Run the experiment.
@@ -58,7 +58,7 @@ def run_exp(
     dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
 
     dt_df["arrival_datetime"] = to_datetime(dt_df["date"] + " " + dt_df["arrival_time"])
-    dt_df.sort_values(by='arrival_datetime')
+    dt_df.sort_values(by="arrival_datetime")
 
     base_model: Optional[MME4BAT] = None
     model: Optional[MME4BAT] = None
@@ -91,23 +91,29 @@ def run_exp(
         )
         if hybrid_strategy and count_not_enough:
             temp_df = dt_df.loc[
-                      (from_date_time <= dt_df["arrival_datetime"]),
-                      :,
-                      ].reset_index(drop=True)
+                (from_date_time <= dt_df["arrival_datetime"]),
+                :,
+            ].reset_index(drop=True)
             if temp_df.shape[0] <= count_min:
                 reached_end = True
             else:
                 to_date_time = temp_df["arrival_datetime"].iloc[count_min - 1]
 
         dt_chunk: DataFrame = dt_df.loc[
-                              (from_date_time <= dt_df["arrival_datetime"])
-                              & (dt_df["arrival_datetime"] < to_date_time),
-                              :,
-                              ].reset_index(drop=True)
+            (from_date_time <= dt_df["arrival_datetime"])
+            & (dt_df["arrival_datetime"] < to_date_time),
+            :,
+        ].reset_index(drop=True)
         count_not_enough = dt_chunk.shape[0] < count_min
 
-        if time_based_strategy or (hybrid_strategy and not count_not_enough) or reached_end:
-            from_date_time = stream_start if from_date_time == hist_start else to_date_time
+        if (
+            time_based_strategy
+            or (hybrid_strategy and not count_not_enough)
+            or reached_end
+        ):
+            from_date_time = (
+                stream_start if from_date_time == hist_start else to_date_time
+            )
             to_date_time = from_date_time + timedelta(minutes=interval_min)
 
             if len(dt_chunk) == 0:
