@@ -1,0 +1,255 @@
+[33mcommit ceae847218c777a3f14b019ebaffd7d765ee9cd7[m[33m ([m[1;36mHEAD -> [m[1;32mhybrid_strategy[m[33m, [m[1;31morigin/hybrid_strategy[m[33m)[m
+Author: shangopi <gopinath.19@cse.mrt.ac.lk>
+Date:   Tue Feb 27 13:26:43 2024 +0530
+
+    implemented hybrid startegy
+
+[33mcommit af4e1ce29cda25a0cdd5af0742e5ade36de0d725[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Gopinath <83128610+shangopi@users.noreply.github.com>
+Date:   Sun Feb 11 13:56:42 2024 +0530
+
+    feat: Add more incremental base models (#12)
+    
+    * completed adding already explored incremental base models
+    
+    * adding river learn_many supported models
+    
+    * fixing minor mistake in river-mlp-regression
+    
+    * Since using partial_fit after fit results in undefined behavior. It is needed to change fit() method
+    
+    * Refactor
+    
+    * Update init
+    
+    ---------
+    
+    Co-authored-by: Kajanan Selvanesan <kajananselvanesan@gmail.com>
+
+[33mcommit 6da478c27b21b64717a638a8474c88a6084bb1bb[m[33m ([m[1;31morigin/feat/kesavi/logger[m[33m)[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Tue Jan 2 22:43:59 2024 +0530
+
+    feat: Initiate module for logging (#23)
+
+[33mcommit c15bffdb24563c809dcfe0af58bea596240c1cfa[m
+Author: Kesavi <74850246+KesaviAravinthan@users.noreply.github.com>
+Date:   Sun Dec 31 19:16:46 2023 +0530
+
+    feat: Introduce active strategy within experiment pipeline (#21)
+    
+    * feat: Introduce active strategy logicwithin experiment pipeline
+    
+    * feat: Introduce active strategy within experiment pipeline
+    
+    * feat: Introduce active strategy within experiment pipeline
+    
+    * Run experiment [upto 2021-11-01, with interval 60 min]
+    
+    ---------
+    
+    Co-authored-by: Kajanan Selvanesan <kajananselvanesan@gmail.com>
+
+[33mcommit 2798dbb47cf6d9af0b9ddb3a5b9c5f3d5c9116d6[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Mon Dec 18 15:36:22 2023 +0530
+
+    ci: Change `check` to `lint` in PR Title Checker (#20)
+    
+    ci: Change check to lint
+
+[33mcommit 9d5facb85b5d24186a4e85ca4c7f8777a26876d4[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Mon Dec 18 15:25:45 2023 +0530
+
+    ci: Add PR title checker using GitHub action (#19)
+    
+    * ci: Add PR title checker using GitHub action
+    
+    * Refactor
+
+[33mcommit 4d26f733d64d31deb39cbd436570841fd2c909b2[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Mon Dec 18 14:31:31 2023 +0530
+
+    feat: Implement experiment pipeline for dwell time prediction with stream data (#18)
+    
+    * refactor: Generalize the pipeline
+    
+    * feat: visualization for dwell time basemodel & model prediction
+    
+    * feat: visualization for dwell time basemodel & model prediction
+    
+    * fix: line plot as not continous & show labels for lines
+    
+    * Run experiments
+    
+    * Run experiments
+    
+    * Implement data streaming functionality
+    
+    * Run experiment [upto 2022-01-01, with interval 60 min]
+    
+    * Run experiment [upto 2022-11-01, with interval 60 min]
+    
+    * Remove fault experiments
+    
+    * Run experiment by changing `stream_end`
+    
+    * Run experiment by changing `time_interval` to 15 min
+    
+    * Run experiment by changing `time_interval` to 15 min
+    
+    * Make `output_parent_dir` as optional
+    
+    ---------
+    
+    Co-authored-by: KesaviAravinthan <kesaviap@gmail.com>
+
+[33mcommit 66d16c68bd2b22b87ac4caee5826a2e7d081efc7[m
+Author: Kesavi <74850246+KesaviAravinthan@users.noreply.github.com>
+Date:   Fri Dec 15 22:41:07 2023 +0530
+
+    feat: Implement DDM (#17)
+    
+    * concept_drift_detector initiated
+    
+    * concept drift detector strategy pattern initiated
+    
+    * resolve commit suggestion
+    
+    * feat: Istrategy created
+    
+    * feat: data drift algorithms implemented
+    
+    * ddm method implemented
+    
+    * Refactor the code
+    
+    ---------
+    
+    Co-authored-by: Kajanan Selvanesan <kajananselvanesan@gmail.com>
+
+[33mcommit e3d3a8dd1ae9383af779a2b05c7a3d42110f8373[m
+Author: Kesavi <74850246+KesaviAravinthan@users.noreply.github.com>
+Date:   Fri Dec 15 19:25:19 2023 +0530
+
+    feat: Initiate a package for concept drift detector (#9)
+    
+    * concept_drift_detector initiated
+    
+    * concept drift detector strategy pattern initiated
+    
+    * resolve commit suggestion
+    
+    * feat: Istrategy created
+    
+    * feat: data drift algorithms implemented
+    
+    * Refactor the code
+    
+    * Add river in requirements.txt
+    
+    ---------
+    
+    Co-authored-by: Kajanan Selvanesan <kajananselvanesan@gmail.com>
+
+[33mcommit 9c778825e5ca811c9c1bd8a4ce6b1664069ba87e[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Sun Dec 10 22:49:10 2023 +0530
+
+    fix: Return non-NaN and non-negative values during the prediction of MME4BAT model (#15)
+
+[33mcommit e3909c061505a60c83c82df2b8eb4bbd690f8c35[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Sun Dec 10 19:34:10 2023 +0530
+
+    feat: Add bus route no 654's dataset with features (#14)
+    
+    * feat: Add bus route no 654's dataset with features
+    
+    * Refactor the code
+
+[33mcommit 9d96db170c61f89dc45df1c99034da31314faacc[m
+Author: Kesavi <74850246+KesaviAravinthan@users.noreply.github.com>
+Date:   Sat Dec 9 13:55:17 2023 +0530
+
+    refactor: Remove inc_online_lrng_mthds module (#13)
+    
+    remove inc_online_lrng_mthds module
+
+[33mcommit 07677417fc7672de2e81e34da67d82c4c0e6d5a1[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Fri Dec 8 11:09:27 2023 +0530
+
+    feat: Initiate end-to-end pipeline (#11)
+    
+    * Initial commit
+    
+    * feat: Create end-to-end pipeline
+
+[33mcommit 516f3cd8dfb926ef84af2ab83df72485398891a3[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Sun Oct 22 20:08:21 2023 +0530
+
+    Update README.md
+
+[33mcommit 6b2c90e4a2167d929412f1db1d18b52dff6c946c[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Sat Oct 14 14:17:39 2023 +0530
+
+    Update README.md
+
+[33mcommit a00fedfccfad62a03cfc14b50b624cf0804e3642[m
+Author: Gopinath <83128610+shangopi@users.noreply.github.com>
+Date:   Sat Oct 14 13:30:45 2023 +0530
+
+    Update README.md
+
+[33mcommit c4b1da21a1465c57fc69442224fd87997504f4f6[m
+Author: Gopinath <83128610+shangopi@users.noreply.github.com>
+Date:   Sat Oct 14 13:30:05 2023 +0530
+
+    Update README.md
+
+[33mcommit fd594df2f222898c908401f72ebbeb931ab20392[m
+Author: Gopinath <83128610+shangopi@users.noreply.github.com>
+Date:   Sat Oct 14 13:26:54 2023 +0530
+
+    Update README.md
+
+[33mcommit 4a1132a3a62669b2275bc8203bf2ef92ecafc8d4[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Sat Oct 14 13:15:31 2023 +0530
+
+    feat: Include MME4BAT model's src code (#10)
+
+[33mcommit f83bb4212b7aef46eb79bf61f4913e52be6ca7bf[m
+Author: Kesavi <74850246+KesaviAravinthan@users.noreply.github.com>
+Date:   Tue Jul 4 22:41:45 2023 +0530
+
+    feat: Add dataset (#6)
+
+[33mcommit c83a8fe0e3fdc4eabd716502e36ed362be48bd36[m
+Author: Kajanan Selvanesan <89178049+kajanan1212@users.noreply.github.com>
+Date:   Tue Jul 4 22:35:31 2023 +0530
+
+    feat: Add SimpleLSTM (#5)
+
+[33mcommit 9ffec6902f4960227a32ff9108933cf638277b6c[m
+Author: Kesavi <74850246+KesaviAravinthan@users.noreply.github.com>
+Date:   Tue Jul 4 22:08:20 2023 +0530
+
+    feat: Add EWC method (#4)
+
+[33mcommit 57305a29cc9eeffe241a82d27047d1bdca95f9a7[m
+Author: Kajanan Selvanesan <kajananselvanesan@gmail.com>
+Date:   Sat Jul 1 00:08:38 2023 +0530
+
+    Setup env
+
+[33mcommit 0b0f47440521e13a1a5cae4b53ae2a5cc5e029ef[m
+Author: Shiveswarran Ratneswaran <shiveswarran@gmail.com>
+Date:   Thu May 25 12:48:22 2023 +0530
+
+    Initial commit
