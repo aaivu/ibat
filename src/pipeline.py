@@ -57,8 +57,10 @@ def run_exp(
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
     dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
 
-    dt_df["arrival_datetime"] = to_datetime(dt_df["date"] + " " + dt_df["arrival_time"])
-    dt_df.sort_values(by="arrival_datetime")
+    dt_df["arrival_datetime"] = to_datetime(
+        dt_df["date"] + " " + dt_df["arrival_time"], format="%Y-%m-%d %H:%M:%S"
+    )
+    dt_df.sort_values(by="arrival_datetime", inplace=True)
 
     base_model: Optional[MME4BAT] = None
     model: Optional[MME4BAT] = None
@@ -78,30 +80,31 @@ def run_exp(
     from_date_time = hist_start
     to_date_time = hist_end
 
-    hybrid_strategy = interval_min and count_min
-    time_based_strategy = interval_min and not count_min
+    hybrid_strategy = interval_min != 0 and count_min != 0
+    time_based_strategy = interval_min != 0 and count_min == 0
 
     count_not_enough = False
     reached_end = False
     while from_date_time < stream_end:
-        print(
-            f"DATA STREAM: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
-            end="",
-            flush=True,
-        )
         if hybrid_strategy and count_not_enough:
             temp_df = dt_df.loc[
                 (from_date_time <= dt_df["arrival_datetime"]),
                 :,
             ].reset_index(drop=True)
-            if temp_df.shape[0] <= count_min:
+            if temp_df.shape[0] < count_min:
                 reached_end = True
             else:
                 to_date_time = temp_df["arrival_datetime"].iloc[count_min - 1]
 
+        print(
+            f"DATA STREAM: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
+            end="",
+            flush=True,
+        )
+
         dt_chunk: DataFrame = dt_df.loc[
             (from_date_time <= dt_df["arrival_datetime"])
-            & (dt_df["arrival_datetime"] < to_date_time),
+            & (dt_df["arrival_datetime"] <= to_date_time),
             :,
         ].reset_index(drop=True)
         count_not_enough = dt_chunk.shape[0] < count_min
@@ -176,6 +179,8 @@ def run_exp(
                     model.incremental_fit(
                         ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
                     )
+        else:
+            print(" Count Not Enough. Waiting for the data points")
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(
