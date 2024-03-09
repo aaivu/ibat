@@ -54,7 +54,7 @@ def run_exp(
 
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
     dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
-
+    dt_df: DataFrame = dt_df.drop(columns=["dwell_time_in_seconds_old"])
     dt_df["arrival_datetime"] = to_datetime(dt_df["date"] + " " + dt_df["arrival_time"])
 
     base_model: Optional[MME4BAT] = None
@@ -151,6 +151,7 @@ def run_exp(
                 model.incremental_fit(
                     ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
                 )
+                print()
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(
