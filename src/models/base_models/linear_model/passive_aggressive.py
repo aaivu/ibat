@@ -2,12 +2,13 @@ from sklearn.linear_model import (
     PassiveAggressiveClassifier as ExPassiveAggressiveClassifier,
     PassiveAggressiveRegressor as ExPassiveAggressiveRegressor,
 )
-from src.models._base_models.sklearn_base_model import SKLearnBaseModel
+from src.models.base_models.base_models import SKLearnBaseModel
 
 
 class PassiveAggressiveClassifier(SKLearnBaseModel):
     def __init__(self) -> None:
         super().__init__()
+        self._is_classifier = True
         self._params = {
             "C": 1.0,
             "max_iter": 1000,
@@ -19,6 +20,7 @@ class PassiveAggressiveClassifier(SKLearnBaseModel):
 class PassiveAggressiveRegressor(SKLearnBaseModel):
     def __init__(self) -> None:
         super().__init__()
+        self._is_classifier = False
         self._params = {
             "C": 0.1,
             "max_iter": 1000,
