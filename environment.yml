@@ -9,3 +9,4 @@ dependencies:
   - pip:
     - -r requirements.txt
     - -r requirements-style.txt
+    - -r requirements-test.txt
