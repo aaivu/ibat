@@ -27,7 +27,7 @@
 ## Architecture
 
 <p align="center">
-    <img src="./docs/images/archi-dig.png" alt="archi-dig" style="max-width: 60%; max-height: 60%;">
+    <img src="./docs/images/archi-dig.png" alt="archi-dig">
 </p>
 
 ## 🛠 Installation
