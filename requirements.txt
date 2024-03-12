@@ -1,10 +1,9 @@
-black
-flake8
+Cython
 numpy
 pandas
 matplotlib
 scikit-learn
 xgboost
 torch
-river
 frouros
+scikit-multiflow
