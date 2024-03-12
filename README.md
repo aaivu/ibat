@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/-Research-yellowgreen" alt="research">
 </p>
 <p align="center">
-    <img src="https://img.shields.io/badge/Bus%20arrival%20time-8A2BE2" alt="bat">
+    <img src="https://img.shields.io/badge/Bus%20arrival%20time%20prediction-8A2BE2" alt="batpre">
     <img src="https://img.shields.io/badge/Hybrid%20batch%20processing-8A2BE2" alt="hbp">
     <img src="https://img.shields.io/badge/Concept%20drift-8A2BE2" alt="cdrift">
     <img src="https://img.shields.io/badge/Active%20strategy-8A2BE2" alt="active">
@@ -27,7 +27,7 @@
 ## Architecture
 
 <p align="center">
-    <img src="./docs/images/archi-dig.png" alt="archi-dig" style="max-width: 75%; max-height: 75%;">
+    <img src="./docs/images/archi-dig.png" alt="archi-dig" style="max-width: 60%; max-height: 60%;">
 </p>
 
 ## 🛠 Installation
@@ -51,7 +51,7 @@ pip install git+ssh://git@github.com/aaivu/ibat.git --upgrade  # using SSH
 
 ## ⚡️ Quickstart
 
-1. To run the pipeline, users can use their datasets or existing datasets from ibat.datasets
+1. To run the pipeline, users can use their datasets or existing datasets from `ibat.datasets`.
 ```py
 from ibat.datasets import BUS_654_DWELL_TIMES, BUS_654_RUNNING_TIMES
 ```
