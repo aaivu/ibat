@@ -113,7 +113,7 @@ if __name__ == "__main__":
 [//]: # ()
 [//]: # (Made with [contributors-img]&#40;https://contrib.rocks&#41;.)
 
-1. Kajanan Selvanesan
+1. [Kajanan Selvanesan](https://github.com/kajanan1212)
 2. @2
 3. @3
 
