@@ -9,7 +9,7 @@
 <p align="center">
     <img src="https://img.shields.io/badge/Bus%20arrival%20time%20prediction-8A2BE2" alt="batpre">
     <img src="https://img.shields.io/badge/Hybrid%20batch%20processing-8A2BE2" alt="hbp">
-    <img src="https://img.shields.io/badge/Concept%20drift-8A2BE2" alt="cdrift">
+    <img src="https://img.shields.io/badge/Concept%20drift%20handling-8A2BE2" alt="cdrift">
     <img src="https://img.shields.io/badge/Active%20strategy-8A2BE2" alt="active">
     <img src="https://img.shields.io/badge/Incremental%20online%20learning-8A2BE2" alt="iol">
 </p>
