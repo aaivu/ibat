@@ -18,6 +18,10 @@ class BaseModel(IBaseModel, ABC):
         return self._is_classifier
 
     @property
+    def is_regressor(self) -> bool:
+        return not self._is_classifier
+
+    @property
     def model(self) -> any:
         if self._model is None:
             raise NotImplementedError()
