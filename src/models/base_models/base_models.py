@@ -2,8 +2,9 @@ from abc import ABC
 from typing import Optional
 
 from numpy import ndarray, unique
-from pandas import DataFrame, Series
+from pandas import concat, DataFrame, Series
 from xgboost import Booster, DMatrix, train
+from river.stream import iter_pandas
 from src.models.base_models.ibase_model import IBaseModel
 
 
@@ -93,7 +94,7 @@ class RiverBatchBaseModel(BaseModel, ABC):
 
     def incremental_fit(self, ni_x, ni_y):
         if self._model is not None:
-            self._model = self._model.learn_many(ni_x, ni_y)
+            self._model.learn_many(ni_x, ni_y)
 
     def predict(self, x) -> DataFrame:
         if len(x) == 0:
@@ -101,3 +102,33 @@ class RiverBatchBaseModel(BaseModel, ABC):
 
         ser_prediction: Series = self._model.predict_many(x)
         return ser_prediction.to_frame(name="prediction")
+
+
+class RiverStreamBaseModel(BaseModel, ABC):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def fit(self, x, y):
+        if self._model is not None:
+            for xi, yi in iter_pandas(x, y):
+                self._model.learn_one(xi, yi)
+        else:
+            raise NotImplementedError("Model is Empty. Choose appropriate subclasses")
+
+    def incremental_fit(self, ni_x, ni_y):
+        if self._model is not None:
+            for xi, yi in iter_pandas(ni_x, ni_y):
+                self._model.learn_one(xi, yi)
+
+    def predict(self, x) -> DataFrame:
+        if len(x) == 0:
+            return DataFrame(columns=["prediction"])
+
+        pd_prediction = DataFrame()
+        for index, row in x.iterrows():
+            y = self._model.predict_one(row)
+            pd_prediction = concat(
+                [pd_prediction, DataFrame({"prediction": [y]})], axis=0
+            )
+
+        return pd_prediction
