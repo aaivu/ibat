@@ -6,6 +6,10 @@ venv:
 setup: venv
 	./venv/bin/pip3 install -r requirements.txt
 
+.PHONY: setup-conda-env
+setup-conda-env:
+	conda env create -f environment.yml
+
 .PHONY: format
 format:
 	./venv/bin/black ./src

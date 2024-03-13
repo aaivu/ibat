@@ -1,0 +1,12 @@
+name: ibat
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - river
+  - pip:
+    - -r requirements.txt
+    - -r requirements-style.txt
+    - -r requirements-test.txt
