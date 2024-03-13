@@ -9,6 +9,6 @@ class DecisionTreeClassifier(RiverStreamBaseModel):
         self._params = {}
         self._model = ExtremelyFastDecisionTreeClassifier(
             grace_period=100,
-            nominal_attributes=['elevel', 'car', 'zipcode'],
-            min_samples_reevaluate=100
+            nominal_attributes=["elevel", "car", "zipcode"],
+            min_samples_reevaluate=100,
         )

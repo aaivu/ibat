@@ -5,7 +5,8 @@ from .hoeffding_tree import (
     HoeffdingTreeClassifier,
     HoeffdingTreeRegressor,
 )
-from .random_forest import ARFClassifier, ARFRegressor
+
+# from .random_forest import ARFClassifier, ARFRegressor
 from .sgt import SGTRegressor
 from .streaming_random_patches import SRPClassifier
 from .xgboost import XGBClassifier, XGBRegressor

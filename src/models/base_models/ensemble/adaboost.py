@@ -9,12 +9,7 @@ class AdaBoostClassifier(RiverStreamBaseModel):
         self._is_classifier = True
         self._params = {}
         self._model = ExAdaBoostClassifier(
-            model=(
-                HoeffdingTreeClassifier(
-                    split_criterion="gini",
-                    grace_period=2000
-                )
-            ),
+            model=(HoeffdingTreeClassifier(split_criterion="gini", grace_period=2000)),
             n_models=5,
-            seed=42
+            seed=42,
         )

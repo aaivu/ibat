@@ -27,12 +27,8 @@ class HoeffdingTreeRegressor(RiverStreamBaseModel):
         super().__init__()
         self._is_classifier = False
         self._params = {}
-        self._model = (
-                StandardScaler() |
-                ExHoeffdingTreeRegressor(
-                    grace_period=100,
-                    model_selector_decay=0.9
-                )
+        self._model = StandardScaler() | ExHoeffdingTreeRegressor(
+            grace_period=100, model_selector_decay=0.9
         )
 
 

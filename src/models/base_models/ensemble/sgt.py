@@ -12,5 +12,5 @@ class SGTRegressor(RiverStreamBaseModel):
             delta=0.01,
             lambda_value=0.01,
             grace_period=20,
-            feature_quantizer=DynamicQuantizer(std_prop=0.1)
+            feature_quantizer=DynamicQuantizer(std_prop=0.1),
         )
