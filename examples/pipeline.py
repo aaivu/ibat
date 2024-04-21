@@ -12,9 +12,9 @@ if __name__ == "__main__":
     historical_data_ending_at = datetime_from_string("2022-02-01")
     streaming_data_starting_from = datetime_from_string("2022-02-01")
     streaming_data_ending_at = datetime_from_string("2022-11-01")
-    time_interval = 60 * 3
+    time_interval = 60 * 2
     chunk_size = 100
-    active_strategy = False
+    active_strategy = True
     cdd_strategy = DDM(
         warning_level=0.1,
         drift_level=1.5,
