@@ -67,3 +67,7 @@ BUS_654_FEATURES_ADDED_RUNNING_TIMES = Dataset(
 BUS_654_FEATURES_ADDED_DWELL_TIMES = Dataset(
     path="./_datasets/bus_stop_times_feature_added_all.csv",
 )
+
+BUS_654_FEATURES_ENCODED_DWELL_TIMES = Dataset(
+    path="./_datasets/bus_stop_times_feature_encoded_all.csv",
+)
