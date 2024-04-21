@@ -13,8 +13,8 @@ from sklearn.metrics import (
 )
 from src.concept_drift_detector.strategies import IStrategy
 from src.datasets import (
-    BUS_654_FEATURES_ADDED_DWELL_TIMES,
     BUS_654_FEATURES_ADDED_RUNNING_TIMES,
+    BUS_654_FEATURES_ENCODED_DWELL_TIMES,
 )
 from src.models.use_cases.arrival_time.bus import MME4BAT
 
@@ -75,8 +75,7 @@ def run_exp(
     print(f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}")
 
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
-    dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
-    dt_df: DataFrame = dt_df.drop(columns=["dwell_time_in_seconds_old"])
+    dt_df: DataFrame = BUS_654_FEATURES_ENCODED_DWELL_TIMES.dataframe
 
     dt_df["arrival_datetime"] = to_datetime(
         dt_df["date"] + " " + dt_df["arrival_time"], format="%Y-%m-%d %H:%M:%S"
