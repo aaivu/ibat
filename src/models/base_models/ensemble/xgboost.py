@@ -7,9 +7,14 @@ class XGBClassifier(XGBoost):
         self._is_classifier = True
         self._params = {
             "objective": "binary:hinge",
-            "eval_metric": "error",
-            "eta": 0.1,
+            # "eval_metric": "error",
+            # "eta": 0.1,
             "seed": 42,
+            "subsample": 1.0,
+            "min_child_weight": 3,
+            "max_depth": 8,
+            "learning_rate": 0.05,
+            "colsample_bytree": 0.6,
         }
 
 
@@ -19,7 +24,12 @@ class XGBRegressor(XGBoost):
         self._is_classifier = False
         self._params = {
             "objective": "reg:squarederror",
-            "eval_metric": "error",
-            "eta": 0.1,
+            # "eval_metric": "error",
+            # "eta": 0.1,
             "seed": 42,
+            "subsample": 1.0,
+            "min_child_weight": 3,
+            "max_depth": 8,
+            "learning_rate": 0.05,
+            "colsample_bytree": 0.6,
         }

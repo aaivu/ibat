@@ -42,6 +42,7 @@ class DDM(IStrategy):
             ni_y_pred = model.predict(ni_x)
 
             error = 1 - accuracy_score(ni_y, ni_y_pred)
+            error = round(error)
             self._ddm.update(value=error)
 
             is_detected = self._ddm.status["drift"]
@@ -57,6 +58,7 @@ class DDM(IStrategy):
                 ni_y_buffer_pred = model.predict(self._ni_x_buffer)
 
                 error = 1 - max(0, r2_score(self._ni_y_buffer, ni_y_buffer_pred))
+                error = round(error)
                 self._ddm.update(value=error)
 
                 is_detected = self._ddm.status["drift"]
