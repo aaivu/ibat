@@ -13,6 +13,7 @@ if __name__ == "__main__":
     streaming_data_starting_from = datetime_from_string("2022-01-01")
     streaming_data_ending_at = datetime_from_string("2022-08-01")
     time_interval = 60
+    chunk_size = 100
     active_strategy = True
     cdd_strategy = DDM(
         warning_level=0.1,
@@ -28,6 +29,7 @@ if __name__ == "__main__":
         stream_start=streaming_data_starting_from,
         stream_end=streaming_data_ending_at,
         interval_min=time_interval,
+        chunk_size=chunk_size,
         active_strategy=active_strategy,
         cdd_strategy=cdd_strategy,
         output_parent_dir=folder_path_to_save_result,
