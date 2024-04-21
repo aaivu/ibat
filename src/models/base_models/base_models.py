@@ -40,7 +40,7 @@ class XGBoost(BaseModel, ABC):
         self._model = train(
             params=self._params,
             dtrain=dtrain,
-            num_boost_round=200,
+            num_boost_round=30,
         )
 
     def incremental_fit(self, ni_x, ni_y):
@@ -48,7 +48,7 @@ class XGBoost(BaseModel, ABC):
         self._model = train(
             params=self._params,
             dtrain=dtrain,
-            num_boost_round=100,
+            num_boost_round=1,
             xgb_model=self._model,
         )
 

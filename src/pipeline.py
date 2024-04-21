@@ -9,7 +9,7 @@ from pandas.errors import SettingWithCopyWarning
 from sklearn.metrics import (
     mean_absolute_error,
     mean_absolute_percentage_error,
-    mean_squared_error,
+    root_mean_squared_error,
 )
 from src.concept_drift_detector.strategies import IStrategy
 from src.datasets import (
@@ -138,7 +138,7 @@ def run_exp(
                 print(" | NO INSTANCES")
                 continue
             else:
-                print(f" | NUMBER OF INSTANCES: {len(dt_chunk)}")
+                print(f" | NUMBER OF INSTANCES: {len(dt_chunk):04d}", end="")
 
             numeric_dt_chunk = dt_chunk.select_dtypes(include="number")
 
@@ -187,8 +187,8 @@ def run_exp(
                         model.incremental_fit(
                             ni_rt_x=None,
                             ni_rt_y=None,
-                            ni_dt_x=dt_x_buffer,
-                            ni_dt_y=dt_y_buffer,
+                            ni_dt_x=dt_x,
+                            ni_dt_y=dt_y,
                         )
                         dt_x_buffer = None
                         dt_y_buffer = None
@@ -198,7 +198,7 @@ def run_exp(
                     )
                     print()
         else:
-            print(f" | NUMBER OF INSTANCES: {len(dt_chunk)} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS.")
+            print(f" | NUMBER OF INSTANCES: {len(dt_chunk):04d} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS.")
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(
@@ -234,8 +234,8 @@ def run_exp(
 ### Model Performance Metrics
 | Model                               | MAE (s)   | MAPE (%)   | RMSE (s)   |
 |-------------------------------------|-----------|------------|------------|
-| Base Model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {mean_absolute_percentage_error(true_predictions, base_model_predictions) * 100} | {mean_squared_error(true_predictions, base_model_predictions, squared=False)} |
-| Base Model with Incremental Learning | {mean_absolute_error(true_predictions, model_predictions)}      | {mean_absolute_percentage_error(true_predictions, model_predictions) * 100}      | {mean_squared_error(true_predictions, model_predictions, squared=False)}      |
+| Base Model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {mean_absolute_percentage_error(true_predictions, base_model_predictions) * 100} | {root_mean_squared_error(true_predictions, base_model_predictions)} |
+| Base Model with Incremental Learning | {mean_absolute_error(true_predictions, model_predictions)}      | {mean_absolute_percentage_error(true_predictions, model_predictions) * 100}      | {root_mean_squared_error(true_predictions, model_predictions)}      |
 
     """
 
@@ -321,7 +321,7 @@ def run_exp(
     from_time = starting_time
 
     while from_time < ending_time:
-        to_time = from_time + timedelta(minutes=interval_min)
+        to_time = from_time + timedelta(minutes=60)
         print(
             f"\rGENERATING & EXPORTING PLOTS FOR EACH BUS STOP: [{from_time.strftime('%H:%M:%S')} - {to_time.strftime('%H:%M:%S')})",
             end="",
