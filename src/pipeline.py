@@ -24,8 +24,8 @@ def run_exp(
     hist_end: datetime,
     stream_start: datetime,
     stream_end: datetime,
-    interval_min: Optional[float] = 0,
-    count_min: Optional[int] = 0,
+    interval_min: float,
+    chunk_size: int,
     active_strategy: Optional[bool] = False,
     cdd_strategy: Optional[IStrategy] = None,
     output_parent_dir: Optional[str] = "./",
@@ -39,8 +39,8 @@ def run_exp(
         hist_end: End timestamp (exclusive) for historical data.
         stream_start: Start timestamp (inclusive) for streaming data.
         stream_end: End timestamp (exclusive) for streaming data.
-        interval_min: Time interval (in minutes) for data processing.
-        count_min: Data Count for data processing
+        interval_min: Minimum waiting time (in minutes) for data processing.
+        chunk_size: Minimum required amount of data for data processing.
         active_strategy: Flag indicating whether to use active strategy (default is False).
         cdd_strategy: Strategy to be used for detecting concept drift. Required if active_strategy is True.
         output_parent_dir: Parent directory's path to save experiment results.
@@ -51,8 +51,28 @@ def run_exp(
     """
     warnings.filterwarnings("ignore", category=SettingWithCopyWarning)
 
+    if interval_min == 0 and chunk_size == 0:
+        raise ValueError("Both interval_min & chunk_size cannot be set to zero.")
+    else:
+        count_not_enough = False
+        is_end_reached = False
+
+        hybrid_bp = interval_min != 0 and chunk_size != 0
+        scheduled_bp = interval_min != 0 and chunk_size == 0
+
+        if hybrid_bp:
+            bp_technique = "HYBRID"
+        elif scheduled_bp:
+            bp_technique = "SCHEDULED"
+        else:
+            bp_technique = "PERIODIC"
+
     if active_strategy and cdd_strategy is None:
         raise ValueError("cdd_strategy must be provided when active_strategy is True.")
+    else:
+        strategy = "ACTIVE" if active_strategy else "PASSIVE"
+
+    print(f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}")
 
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
     dt_df: DataFrame = BUS_654_FEATURES_ADDED_DWELL_TIMES.dataframe
@@ -61,7 +81,7 @@ def run_exp(
         dt_df["date"] + " " + dt_df["arrival_time"], format="%Y-%m-%d %H:%M:%S"
     )
     dt_df.sort_values(by="arrival_datetime", inplace=True)
-
+ 
     base_model: Optional[MME4BAT] = None
     model: Optional[MME4BAT] = None
 
@@ -80,21 +100,16 @@ def run_exp(
     from_date_time = hist_start
     to_date_time = hist_end
 
-    hybrid_strategy = interval_min != 0 and count_min != 0
-    time_based_strategy = interval_min != 0 and count_min == 0
-
-    count_not_enough = False
-    reached_end = False
     while from_date_time < stream_end:
-        if hybrid_strategy and count_not_enough:
+        if hybrid_bp and count_not_enough:
             temp_df = dt_df.loc[
-                (from_date_time <= dt_df["arrival_datetime"]),
+                (dt_df["arrival_datetime"] >= from_date_time),
                 :,
             ].reset_index(drop=True)
-            if temp_df.shape[0] < count_min:
-                reached_end = True
+            if temp_df.shape[0] < chunk_size:
+                is_end_reached = True
             else:
-                to_date_time = temp_df["arrival_datetime"].iloc[count_min - 1]
+                to_date_time = temp_df["arrival_datetime"].iloc[chunk_size - 1] + timedelta(minutes=1)
 
         print(
             f"DATA STREAM: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
@@ -104,15 +119,15 @@ def run_exp(
 
         dt_chunk: DataFrame = dt_df.loc[
             (from_date_time <= dt_df["arrival_datetime"])
-            & (dt_df["arrival_datetime"] <= to_date_time),
+            & (dt_df["arrival_datetime"] < to_date_time),
             :,
         ].reset_index(drop=True)
-        count_not_enough = dt_chunk.shape[0] < count_min
+        count_not_enough = dt_chunk.shape[0] < chunk_size
 
         if (
-            time_based_strategy
-            or (hybrid_strategy and not count_not_enough)
-            or reached_end
+            scheduled_bp
+            or (hybrid_bp and not count_not_enough)
+            or is_end_reached
         ):
             from_date_time = (
                 stream_start if from_date_time == hist_start else to_date_time
@@ -122,6 +137,8 @@ def run_exp(
             if len(dt_chunk) == 0:
                 print(" | NO INSTANCES")
                 continue
+            else:
+                print(f" | NUMBER OF INSTANCES: {len(dt_chunk)}")
 
             numeric_dt_chunk = dt_chunk.select_dtypes(include="number")
 
@@ -180,7 +197,7 @@ def run_exp(
                         ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
                     )
         else:
-            print(" Count Not Enough. Waiting for the data points")
+            print(f" | NUMBER OF INSTANCES: {len(dt_chunk)} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS.")
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(
@@ -205,8 +222,10 @@ def run_exp(
 - Historical data ending at: {hist_end}
 - Streaming data starting from: {stream_start}
 - Streaming data ending at: {stream_end}
-- Time interval: {interval_min}
-- Concept drift detection strategy: {"ACTIVE" if active_strategy else "PASSIVE"}
+- Minimum waiting time: {interval_min} minutes
+- Minimum required amount of data: {chunk_size}
+- Batch processing technique: {bp_technique}
+- Concept drift handling strategy: {strategy}
 - Concept drift detection algorithm: {cdd_strategy.__class__.__name__ if active_strategy else None}
 {cdd_strategy_content}
 
