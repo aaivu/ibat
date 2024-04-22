@@ -225,6 +225,12 @@ def run_exp(
         for attr, value in cdd_strategy.get_attributes().items():
             cdd_strategy_content += f"| {attr} | {value} |\n"
 
+    base_model_mae = mean_absolute_error(true_predictions, base_model_predictions)
+    model_mae = mean_absolute_error(true_predictions, model_predictions)
+
+    base_model_rmse = root_mean_squared_error(true_predictions, base_model_predictions)
+    model_rmse = root_mean_squared_error(true_predictions, model_predictions)
+
     md_file_content = f"""
 # Experiment: {label}
 
@@ -243,11 +249,12 @@ def run_exp(
 ## Results
 - Model performance metrics:
 
-| Model                               | MAE (s)   | RMSE (s)   |
-|-------------------------------------|-----------|------------|
-| Base model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {root_mean_squared_error(true_predictions, base_model_predictions)} |
-| Base model with incremental learning | {mean_absolute_error(true_predictions, model_predictions)}      | {root_mean_squared_error(true_predictions, model_predictions)}      |
+| Model                                | MAE (s)              | RMSE (s)              |
+|--------------------------------------|----------------------|-----------------------|
+| Base model (XGBoost)                 | {base_model_mae:.3f} | {base_model_rmse:.3f} |
+| Base model with incremental learning | {model_mae:.3f}      | {model_rmse:.3f}      |
 
+- Error reduction percentage in terms of MAE: {(base_model_mae - model_mae) * 100 / base_model_mae:.3f} %
 - Average processing time after the batch preparation: {mean(processing_times) * 1000:.3f} ms
     """
 
