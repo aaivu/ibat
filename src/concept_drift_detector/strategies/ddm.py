@@ -106,7 +106,7 @@ class DDM(IStrategy):
 
     def get_attributes(self) -> Dict[str, Any]:
         return {
-            "Warning Level Factor": float(self._warning_level),
-            "Drift Level Factor": float(self._drift_level),
-            "Minimum Numbers of Instances to Start Looking for Changes": self._min_num_instances,
+            "Warning level factor": float(self._warning_level),
+            "Drift level factor": float(self._drift_level),
+            "Minimum numbers of instances/batches to start looking for changes": self._min_num_instances,
         }

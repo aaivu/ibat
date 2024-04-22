@@ -1,9 +1,11 @@
 import os
 import warnings
 from datetime import datetime, timedelta
+from time import time
 from typing import Optional
 
 import matplotlib.pyplot as plt
+from numpy import mean
 from pandas import concat, DataFrame, to_datetime
 from pandas.errors import SettingWithCopyWarning
 from sklearn.metrics import (
@@ -94,6 +96,8 @@ def run_exp(
     base_model_predictions = []
     model_predictions = []
 
+    processing_times = []
+
     dt_x_buffer: Optional[DataFrame] = None
     dt_y_buffer: Optional[DataFrame] = None
 
@@ -172,6 +176,8 @@ def run_exp(
 
                 result_dt_df = concat([result_dt_df, dt_chunk], ignore_index=True)
 
+                start_time = time()
+
                 if active_strategy:
                     if (dt_x_buffer is None) or (dt_y_buffer is None):
                         dt_x_buffer = dt_x
@@ -197,6 +203,10 @@ def run_exp(
                         ni_rt_x=None, ni_rt_y=None, ni_dt_x=dt_x, ni_dt_y=dt_y
                     )
                     print()
+
+                end_time = time()
+                processing_time = end_time - start_time
+                processing_times.append(processing_time)
         else:
             print(f" | NUMBER OF INSTANCES: {len(dt_chunk):04d} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS.")
 
@@ -231,12 +241,14 @@ def run_exp(
 {cdd_strategy_content}
 
 ## Results
-### Model Performance Metrics
+- Model performance metrics:
+
 | Model                               | MAE (s)   | MAPE (%)   | RMSE (s)   |
 |-------------------------------------|-----------|------------|------------|
-| Base Model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {mean_absolute_percentage_error(true_predictions, base_model_predictions) * 100} | {root_mean_squared_error(true_predictions, base_model_predictions)} |
-| Base Model with Incremental Learning | {mean_absolute_error(true_predictions, model_predictions)}      | {mean_absolute_percentage_error(true_predictions, model_predictions) * 100}      | {root_mean_squared_error(true_predictions, model_predictions)}      |
+| Base model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {mean_absolute_percentage_error(true_predictions, base_model_predictions) * 100} | {root_mean_squared_error(true_predictions, base_model_predictions)} |
+| Base model with incremental learning | {mean_absolute_error(true_predictions, model_predictions)}      | {mean_absolute_percentage_error(true_predictions, model_predictions) * 100}      | {root_mean_squared_error(true_predictions, model_predictions)}      |
 
+- Average processing time after the batch preparation: {mean(processing_times) * 1000:.3f} ms
     """
 
     output_dir = os.path.join(
