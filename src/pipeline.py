@@ -243,10 +243,10 @@ def run_exp(
 ## Results
 - Model performance metrics:
 
-| Model                               | MAE (s)   | MAPE (%)   | RMSE (s)   |
-|-------------------------------------|-----------|------------|------------|
-| Base model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {mean_absolute_percentage_error(true_predictions, base_model_predictions) * 100} | {root_mean_squared_error(true_predictions, base_model_predictions)} |
-| Base model with incremental learning | {mean_absolute_error(true_predictions, model_predictions)}      | {mean_absolute_percentage_error(true_predictions, model_predictions) * 100}      | {root_mean_squared_error(true_predictions, model_predictions)}      |
+| Model                               | MAE (s)   | RMSE (s)   |
+|-------------------------------------|-----------|------------|
+| Base model (XGBoost)                 | {mean_absolute_error(true_predictions, base_model_predictions)} | {root_mean_squared_error(true_predictions, base_model_predictions)} |
+| Base model with incremental learning | {mean_absolute_error(true_predictions, model_predictions)}      | {root_mean_squared_error(true_predictions, model_predictions)}      |
 
 - Average processing time after the batch preparation: {mean(processing_times) * 1000:.3f} ms
     """
