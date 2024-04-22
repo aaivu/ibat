@@ -12,9 +12,10 @@ if __name__ == "__main__":
     historical_data_ending_at = datetime_from_string("2022-02-01")
     streaming_data_starting_from = datetime_from_string("2022-02-01")
     streaming_data_ending_at = datetime_from_string("2022-11-01")
-    time_interval = 60 * 2
+    time_interval = 60 * 3
     chunk_size = 100
     active_strategy = True
+    is_buffer_enabled = True
     cdd_strategy = DDM(
         warning_level=0.1,
         drift_level=1.5,
@@ -31,6 +32,7 @@ if __name__ == "__main__":
         interval_min=time_interval,
         chunk_size=chunk_size,
         active_strategy=active_strategy,
+        is_buffer_enabled=is_buffer_enabled,
         cdd_strategy=cdd_strategy,
         output_parent_dir=folder_path_to_save_result,
         label=experiment_label,
