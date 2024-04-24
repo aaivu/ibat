@@ -104,18 +104,19 @@ if __name__ == "__main__":
 
 ## 🤝 Contributors
 
-[//]: # (<a href = "https://github.com/aaivu/ibat/graphs/contributors">)
+<a href = "https://github.com/aaivu/ibat/graphs/contributors">
 
-[//]: # (  <img src = "https://contrib.rocks/image?repo=aaivu/ibat" alt="contributors">)
+  <img src = "https://contrib.rocks/image?repo=aaivu/ibat" alt="contributors"/>
 
-[//]: # (</a>)
+</a>
 
-[//]: # ()
-[//]: # (Made with [contributors-img]&#40;https://contrib.rocks&#41;.)
+Made with [contributors-img](https://contrib.rocks).
 
-1. [Kajanan Selvanesan](https://github.com/kajanan1212)
-2. [Kesavi Aravinthan](https://github.com/KesaviAravinthan) 
-3. @3
+[//]: # (1. [Kajanan Selvanesan]&#40;https://github.com/kajanan1212&#41;)
+
+[//]: # (2. [Kesavi Aravinthan]&#40;https://github.com/KesaviAravinthan&#41; )
+
+[//]: # (3. @3)
 
 [//]: # (## 💬 Citation)
 
