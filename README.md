@@ -110,12 +110,15 @@ if __name__ == "__main__":
 
 </a>
 
+<br>
 
 Made with [contributors-img](https://contrib.rocks).
 
-1. [Kajanan Selvanesan](https://github.com/kajanan1212)
-2. [Kesavi Aravinthan](https://github.com/KesaviAravinthan) 
-3. @3
+[//]: # (1. [Kajanan Selvanesan]&#40;https://github.com/kajanan1212&#41;)
+
+[//]: # (2. [Kesavi Aravinthan]&#40;https://github.com/KesaviAravinthan&#41; )
+
+[//]: # (3. @3)
 
 [//]: # (## 💬 Citation)
 
