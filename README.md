@@ -106,11 +106,9 @@ if __name__ == "__main__":
 
 <a href = "https://github.com/aaivu/ibat/graphs/contributors">
 
-  <img src = "https://contrib.rocks/image?repo=aaivu/ibat" alt="contributors">
+  <img src = "https://contrib.rocks/image?repo=aaivu/ibat" alt="contributors"/>
 
 </a>
-
-<br>
 
 Made with [contributors-img](https://contrib.rocks).
 
