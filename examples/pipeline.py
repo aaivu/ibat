@@ -2,7 +2,7 @@ from datetime import datetime
 
 from src.concept_drift_detector.strategies import DDM
 from src.datasets import BUS_654_FEATURES_ENCODED_DWELL_TIMES
-from src.pipeline import run_exp
+from src.pipeline import run_dt_exp
 
 
 def datetime_from_string(datetime_string: str) -> datetime:
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     folder_path_to_save_result = "../experiments"
     experiment_label = "m-xgb-s-xgb_model-d-batch_r2"
 
-    run_exp(
+    run_dt_exp(
         dt_df=dwell_time_df,
         hist_start=historical_data_starting_from,
         hist_end=historical_data_ending_at,
