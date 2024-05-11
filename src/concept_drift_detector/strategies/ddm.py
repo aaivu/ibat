@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score, mean_absolute_percentage_error, r2_s
 from frouros.detectors.concept_drift import DDM as fDDM, DDMConfig
 from frouros.metrics import PrequentialError
 from src.concept_drift_detector.strategies.istrategy import IStrategy
+
 # from src.models.base_models import BaseModel
 
 

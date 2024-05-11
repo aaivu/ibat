@@ -1,5 +1,6 @@
 from pandas import DataFrame
 from src.concept_drift_detector.strategies.istrategy import IStrategy
+
 # from src.models.base_models import BaseModel
 
 

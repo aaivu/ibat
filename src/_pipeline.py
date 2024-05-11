@@ -81,7 +81,9 @@ def run_exp(
     else:
         strategy = "ACTIVE" if active_strategy else "PASSIVE"
 
-    print(f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}")
+    print(
+        f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}"
+    )
 
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
     # dt_df: DataFrame = BUS_654_FEATURES_ENCODED_DWELL_TIMES.dataframe
@@ -120,7 +122,9 @@ def run_exp(
             if temp_df.shape[0] < chunk_size:
                 is_end_reached = True
             else:
-                to_date_time = temp_df["arrival_datetime"].iloc[chunk_size - 1] + timedelta(minutes=1)
+                to_date_time = temp_df["arrival_datetime"].iloc[
+                    chunk_size - 1
+                ] + timedelta(minutes=1)
 
         print(
             f"DATA STREAM: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
@@ -135,11 +139,7 @@ def run_exp(
         ].reset_index(drop=True)
         count_not_enough = dt_chunk.shape[0] < chunk_size
 
-        if (
-            scheduled_bp
-            or (hybrid_bp and not count_not_enough)
-            or is_end_reached
-        ):
+        if scheduled_bp or (hybrid_bp and not count_not_enough) or is_end_reached:
             from_date_time = (
                 stream_start if from_date_time == hist_start else to_date_time
             )
@@ -221,7 +221,9 @@ def run_exp(
                 processing_time = end_time - start_time
                 processing_times.append(processing_time)
         else:
-            print(f" | NUMBER OF INSTANCES: {len(dt_chunk):04d} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS.")
+            print(
+                f" | NUMBER OF INSTANCES: {len(dt_chunk):04d} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS."
+            )
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(

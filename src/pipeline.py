@@ -74,7 +74,9 @@ def run_dt_exp(
     else:
         strategy = "ACTIVE" if active_strategy else "PASSIVE"
 
-    print(f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}")
+    print(
+        f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}"
+    )
 
     dt_df["arrival_datetime"] = to_datetime(
         dt_df["date"] + " " + dt_df["arrival_time"], format="%Y-%m-%d %H:%M:%S"
@@ -110,7 +112,9 @@ def run_dt_exp(
             if temp_df.shape[0] < chunk_size:
                 is_end_reached = True
             else:
-                to_date_time = temp_df["arrival_datetime"].iloc[chunk_size - 1] + timedelta(minutes=1)
+                to_date_time = temp_df["arrival_datetime"].iloc[
+                    chunk_size - 1
+                ] + timedelta(minutes=1)
 
         print(
             f"DATA STREAM: [{from_date_time.strftime('%Y-%m-%d %H:%M:%S')} - {to_date_time.strftime('%Y-%m-%d %H:%M:%S')})",
@@ -125,11 +129,7 @@ def run_dt_exp(
         ].reset_index(drop=True)
         count_not_enough = dt_chunk.shape[0] < chunk_size
 
-        if (
-            scheduled_bp
-            or (hybrid_bp and not count_not_enough)
-            or is_end_reached
-        ):
+        if scheduled_bp or (hybrid_bp and not count_not_enough) or is_end_reached:
             from_date_time = (
                 stream_start if from_date_time == hist_start else to_date_time
             )
@@ -159,9 +159,7 @@ def run_dt_exp(
                 base_model_prediction = base_model.predict(dt_x=dt_x)[
                     "prediction"
                 ].tolist()
-                model_prediction = model.predict(dt_x=dt_x)[
-                    "prediction"
-                ].tolist()
+                model_prediction = model.predict(dt_x=dt_x)["prediction"].tolist()
 
                 true_predictions.extend(true_prediction)
                 base_model_predictions.extend(base_model_prediction)
@@ -200,16 +198,16 @@ def run_dt_exp(
                         dt_x_buffer = None
                         dt_y_buffer = None
                 else:
-                    model.incremental_fit(
-                        ni_dt_x=dt_x, ni_dt_y=dt_y
-                    )
+                    model.incremental_fit(ni_dt_x=dt_x, ni_dt_y=dt_y)
                     print()
 
                 end_time = time()
                 processing_time = end_time - start_time
                 processing_times.append(processing_time)
         else:
-            print(f" | NUMBER OF INSTANCES: {len(dt_chunk):04d} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS.")
+            print(
+                f" | NUMBER OF INSTANCES: {len(dt_chunk):04d} | COUNT IS NOT ENOUGH. WAITING FOR MORE DATA POINTS."
+            )
 
     print("\rDATA STREAMING ENDED.", flush=True)
     print(
