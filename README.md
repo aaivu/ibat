@@ -76,8 +76,10 @@ Output:
 3. `pipeline` can be used to run experiments with the all the steps by simply running one function with some parameters.
 ```py
 from datetime import datetime
-from ibat.pipeline import run_exp
+
 from ibat.concept_drift_detector.strategies import DDM
+from ibat.datasets import BUS_654_FEATURES_ENCODED_DWELL_TIMES
+from ibat.pipeline import run_dt_exp
 
 
 def datetime_from_string(datetime_string: str) -> datetime:
@@ -86,19 +88,24 @@ def datetime_from_string(datetime_string: str) -> datetime:
 
 if __name__ == "__main__":
     cdd_strategy = DDM(
-        drift_level=2,
-        min_num_instances=2,
+        warning_level=0.1,
+        drift_level=1.5,
+        min_num_instances=1,
     )
-    run_exp(
+    run_dt_exp(
+        dt_df=BUS_654_FEATURES_ENCODED_DWELL_TIMES.dataframe,
         hist_start=datetime_from_string("2021-10-01"),
-        hist_end=datetime_from_string("2022-01-01"),
-        stream_start=datetime_from_string("2022-01-01"),
+        hist_end=datetime_from_string("2022-02-01"),
+        stream_start=datetime_from_string("2022-02-01"),
         stream_end=datetime_from_string("2022-11-01"),
-        interval_min=60,
+        interval_min=60 * 2,
+        chunk_size=100,
         active_strategy=True,
+        is_buffer_enabled=False,
         cdd_strategy=cdd_strategy,
-        output_parent_dir="../experiments",
-        label="m-xgb-s-xgb_model",
+        incremental_learning=True,
+        output_parent_dir="./demo",
+        label="demo-dt-exp-for-hbp",
     )
 ```
 
