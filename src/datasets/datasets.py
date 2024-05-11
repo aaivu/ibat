@@ -4,7 +4,7 @@ from typing import Optional
 
 from numpy import ndarray
 from pandas import DataFrame, read_csv
-from torch import from_numpy, Tensor
+# from torch import from_numpy, Tensor
 
 
 class DatasetFileFormat(Enum):
@@ -29,7 +29,7 @@ class Dataset:
 
     @property
     def dataframe(self) -> Optional[DataFrame]:
-        if not self._dataframe:
+        if self._dataframe is None:
             df = None
             if self._file_format == DatasetFileFormat.CSV:
                 df = read_csv(self._path)
@@ -43,13 +43,13 @@ class Dataset:
             return df.to_numpy()
         return None
 
-    def as_tensor(self) -> Optional[Tensor]:
-        df = self.dataframe
-        if df is not None:
-            # Assuming the DataFrame only has numerical data
-            np_array = df.to_numpy()
-            return from_numpy(np_array)
-        return None
+    # def as_tensor(self) -> Optional[Tensor]:
+    #     df = self.dataframe
+    #     if df is not None:
+    #         # Assuming the DataFrame only has numerical data
+    #         np_array = df.to_numpy()
+    #         return from_numpy(np_array)
+    #     return None
 
 
 BUS_654_RUNNING_TIMES = Dataset(

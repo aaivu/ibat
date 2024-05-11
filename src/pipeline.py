@@ -22,6 +22,7 @@ from src.models.use_cases.arrival_time.bus import MME4BAT
 
 
 def run_exp(
+    dt_df: DataFrame,
     hist_start: datetime,
     hist_end: datetime,
     stream_start: datetime,
@@ -31,6 +32,7 @@ def run_exp(
     active_strategy: Optional[bool] = False,
     is_buffer_enabled: Optional[bool] = False,
     cdd_strategy: Optional[IStrategy] = None,
+    incremental_learning: Optional[bool] = True,
     output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
 ) -> None:
@@ -38,6 +40,7 @@ def run_exp(
     Run the experiment.
 
     Args:
+        dt_df: Dwell time dataframe to contact the experiment.
         hist_start: Start timestamp (inclusive) for historical data.
         hist_end: End timestamp (exclusive) for historical data.
         stream_start: Start timestamp (inclusive) for streaming data.
@@ -47,13 +50,15 @@ def run_exp(
         active_strategy: Flag indicating whether to use active strategy (default is False).
         is_buffer_enabled: To do (default is False).
         cdd_strategy: Strategy to be used for detecting concept drift. Required if active_strategy is True.
+        incremental_learning: To do (default is True).
         output_parent_dir: Parent directory's path to save experiment results.
         label: Experiment label (default is an empty string).
 
     Returns:
         None
     """
-    warnings.filterwarnings("ignore", category=SettingWithCopyWarning)
+    # To do: warnings.filterwarnings("ignore", category=SettingWithCopyWarning)
+    warnings.filterwarnings("ignore")
 
     if interval_min == 0 and chunk_size == 0:
         raise ValueError("Both interval_min & chunk_size cannot be set to zero.")
@@ -79,7 +84,7 @@ def run_exp(
     print(f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}")
 
     rt_df: DataFrame = BUS_654_FEATURES_ADDED_RUNNING_TIMES.dataframe
-    dt_df: DataFrame = BUS_654_FEATURES_ENCODED_DWELL_TIMES.dataframe
+    # dt_df: DataFrame = BUS_654_FEATURES_ENCODED_DWELL_TIMES.dataframe
 
     dt_df["arrival_datetime"] = to_datetime(
         dt_df["date"] + " " + dt_df["arrival_time"], format="%Y-%m-%d %H:%M:%S"
