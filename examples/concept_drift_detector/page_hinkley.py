@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from src.concept_drift_detector import CDD
-from src.concept_drift_detector.strategies import PageHinkley
+from ibat.concept_drift_detector import CDD
+from ibat.concept_drift_detector.strategies import PageHinkley
 
 
 sorted_mean_arrival_time = pd.read_csv("../../asserts/datasets/input.csv")
