@@ -1,9 +1,7 @@
-Cython
-numpy
-pandas
-matplotlib
-scikit-learn
-xgboost
-frouros
-scikit-multiflow
-# torch
+river==0.13.0
+numpy==1.26.4
+pandas==2.2.2
+matplotlib==3.8.4
+scikit-learn==1.4.2
+xgboost==2.0.3
+frouros==0.8.0
