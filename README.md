@@ -24,8 +24,8 @@
         <img src="https://img.shields.io/badge/code%20style-black-000000.svg?color=blue" alt="black">
     </a>
     <!-- License -->
-    <a href="https://opensource.org/licenses/BSD-3-Clause">
-        <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square" alt="bsd_3_license">
+    <a href="https://opensource.org/licenses/MIT">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="mit_license">
     </a>
 </p>
 
