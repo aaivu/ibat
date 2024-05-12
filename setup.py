@@ -50,7 +50,7 @@ prediction models in heterogeneous traffic conditions by addressing real concept
     install_requires=requirements,
     project_urls={
         "Homepage": "https://github.com/aaivu/ibat",
-        "Source": "https://github.com/aaivu/ibat",
+        "Source Code": "https://github.com/aaivu/ibat",
         "Download": "https://github.com/aaivu/ibat/releases",
         "Documentation": "https://github.com/aaivu/ibat/blob/master/README.md",
         "Bug Tracker": "https://github.com/aaivu/ibat/issues",
