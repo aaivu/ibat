@@ -2,10 +2,6 @@
     <img height="238" src="./asserts/images/logo-1.png" alt="ibat_logo">
 </p>
 
-<p align="center">
-    <b>iBAT</b> is a Python framework to enhance the real-time bus arrival/dwell time prediction in heterogenous traffic condition by addressing concept drift.
-</p>
-
 [//]: # (<p align="center">)
 
 [//]: # (    <img src="https://img.shields.io/badge/-Project-blue" alt="project">)
@@ -14,13 +10,6 @@
 
 [//]: # (</p>)
 
-<p align="center">
-    <img src="https://img.shields.io/badge/Bus%20arrival/dwell%20time%20prediction-8A2BE2" alt="batpre">
-    <img src="https://img.shields.io/badge/Hybrid%20batch%20processing-8A2BE2" alt="hbp">
-    <img src="https://img.shields.io/badge/Concept%20drift%20handling-8A2BE2" alt="cdrift">
-    <img src="https://img.shields.io/badge/Active%20strategy-8A2BE2" alt="active">
-    <img src="https://img.shields.io/badge/Incremental%20learning-8A2BE2" alt="iol">
-</p>
 <p align="center">
     <!-- PyPI -->
     <a href="https://pypi.org/project/gps2gtfs">
@@ -38,6 +27,18 @@
     <a href="https://opensource.org/licenses/BSD-3-Clause">
         <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square" alt="bsd_3_license">
     </a>
+</p>
+
+<p align="center">
+    <img src="https://img.shields.io/badge/Bus%20arrival/dwell%20time%20prediction-8A2BE2" alt="batpre">
+    <img src="https://img.shields.io/badge/Hybrid%20batch%20processing-8A2BE2" alt="hbp">
+    <img src="https://img.shields.io/badge/Concept%20drift%20handling-8A2BE2" alt="cdrift">
+    <img src="https://img.shields.io/badge/Active%20strategy-8A2BE2" alt="active">
+    <img src="https://img.shields.io/badge/Incremental%20learning-8A2BE2" alt="iol">
+</p>
+
+<p align="center">
+    <b>iBAT</b> is a Python framework to enhance the real-time bus arrival/dwell time prediction in heterogenous traffic condition by addressing concept drift.
 </p>
 
 ## Description
