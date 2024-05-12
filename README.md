@@ -13,6 +13,24 @@
     <img src="https://img.shields.io/badge/Active%20strategy-8A2BE2" alt="active">
     <img src="https://img.shields.io/badge/Incremental%20online%20learning-8A2BE2" alt="iol">
 </p>
+<p align="center">
+    <!-- PyPI -->
+    <a href="https://pypi.org/project/gps2gtfs">
+        <img src="https://img.shields.io/pypi/v/gps2gtfs.svg?label=PyPI%20release&color=blue&style=flat-square" alt="pypi">
+    </a>
+    <!-- PePy -->
+    <a href="https://pepy.tech/project/gps2gtfs">
+        <img src="https://static.pepy.tech/badge/gps2gtfs?label=PyPI%20downloads&style=flat-square" alt="pepy">
+    </a>
+    <!-- Black -->
+    <a href="https://github.com/psf/black">
+        <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="black">
+    </a>
+    <!-- License -->
+    <a href="https://opensource.org/licenses/BSD-3-Clause">
+        <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square" alt="bsd_3_license">
+    </a>
+</p>
 
 <p align="center">
     <b>iBAT</b> is a Python framework to enhance the real-time bus arrival time prediction in heterogenous traffic condition by addressing concept drift.
