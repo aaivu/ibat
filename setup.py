@@ -5,10 +5,10 @@ from os import path
 
 HERE = path.abspath(path.dirname(__file__))
 
-with open(path.join(HERE, "README.md"), "r", encoding='utf-8') as f:
+with open(path.join(HERE, "README.md"), "r", encoding="utf-8") as f:
     long_description = f.read()
 
-with open(path.join(HERE, "requirements.txt"), "r", encoding='utf-8') as f:
+with open(path.join(HERE, "requirements.txt"), "r", encoding="utf-8") as f:
     requirements = f.read().splitlines()
 
 classifiers = [
@@ -40,7 +40,7 @@ prediction models in heterogeneous traffic conditions by addressing real concept
         "Incremental learning",
     ],
     author="Aaivu",
-    author_email='helloaaivu@gmail.com',
+    author_email="helloaaivu@gmail.com",
     license="MIT",
     python_requires=">=3.9",
     classifiers=classifiers,
@@ -52,5 +52,5 @@ prediction models in heterogeneous traffic conditions by addressing real concept
         "Download": "https://github.com/aaivu/ibat/releases",
         "Documentation": "https://github.com/aaivu/ibat/blob/master/README.md",
         "Bug Tracker": "https://github.com/aaivu/ibat/issues",
-    }
+    },
 )

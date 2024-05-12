@@ -12,12 +12,12 @@ setup-conda-env:
 
 .PHONY: format
 format:
-	./venv/bin/black ./src
+	./venv/bin/black ./ibat
 	./venv/bin/black ./examples
 
 .PHONY: lint
 lint:
-	./venv/bin/flake8 ./src
+	./venv/bin/flake8 ./ibat
 
 .PHONY: clean
 clean:
