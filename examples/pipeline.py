@@ -23,8 +23,8 @@ if __name__ == "__main__":
         drift_level=1.5,
         min_num_instances=1,
     )
-    is_buffer_enabled = False
     incremental_learning = True
+    is_buffer_enabled = False
     folder_path_to_save_result = "../experiments"
     experiment_label = "m-xgb-s-xgb_model"
 
@@ -37,9 +37,9 @@ if __name__ == "__main__":
         interval_min=time_interval,
         chunk_size=chunk_size,
         active_strategy=active_strategy,
-        is_buffer_enabled=is_buffer_enabled,
         cdd_strategy=cdd_strategy,
         incremental_learning=incremental_learning,
+        is_buffer_enabled=is_buffer_enabled,
         output_parent_dir=folder_path_to_save_result,
         label=experiment_label,
     )

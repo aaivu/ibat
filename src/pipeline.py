@@ -25,8 +25,8 @@ def run_dt_exp(
     chunk_size: int,
     active_strategy: Optional[bool] = False,
     cdd_strategy: Optional[IStrategy] = None,
-    is_buffer_enabled: Optional[bool] = False,
     incremental_learning: Optional[bool] = True,
+    is_buffer_enabled: Optional[bool] = False,
     output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
 ) -> None:
@@ -43,8 +43,8 @@ def run_dt_exp(
         chunk_size: Minimum required amount of data for data processing.
         active_strategy: Flag indicating whether to use active strategy (default is False).
         cdd_strategy: Strategy to be used for detecting concept drift. Required if active_strategy is True.
-        is_buffer_enabled: Flag indicating whether buffering is enabled (default is False).
         incremental_learning: Flag indicating whether to perform incremental learning (default is True).
+        is_buffer_enabled: Flag indicating whether buffering is enabled (default is False).
         output_parent_dir: Parent directory's path to save experiment results.
         label: Experiment label (default is an empty string).
 
@@ -274,8 +274,8 @@ def run_dt_exp(
 - Batch processing technique: {bp_technique}
 - Concept drift handling strategy: {strategy}
 - Concept drift detection algorithm: {cdd_strategy.__class__.__name__ if active_strategy else None}
-- Is buffer enabled: {is_buffer_enabled}
 - Strategy to update the outdated model: {mu_strategy}
+- Is buffer enabled: {is_buffer_enabled}
 {cdd_strategy_content}
 
 ## Results

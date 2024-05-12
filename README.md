@@ -120,8 +120,8 @@ if __name__ == "__main__":
         chunk_size=100,
         active_strategy=True,
         cdd_strategy=cdd_strategy,
-        is_buffer_enabled=False,
         incremental_learning=True,
+        is_buffer_enabled=False,
         output_parent_dir="./demo",
         label="demo-dt-exp-for-hbp",
     )
