@@ -119,9 +119,9 @@ if __name__ == "__main__":
         interval_min=60 * 2,
         chunk_size=100,
         active_strategy=True,
-        is_buffer_enabled=False,
         cdd_strategy=cdd_strategy,
         incremental_learning=True,
+        is_buffer_enabled=False,
         output_parent_dir="./demo",
         label="demo-dt-exp-for-hbp",
     )

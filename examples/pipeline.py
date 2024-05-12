@@ -18,15 +18,15 @@ if __name__ == "__main__":
     time_interval = 60 * 2
     chunk_size = 100
     active_strategy = True
-    is_buffer_enabled = False
     cdd_strategy = DDM(
         warning_level=0.1,
         drift_level=1.5,
         min_num_instances=1,
     )
     incremental_learning = True
+    is_buffer_enabled = False
     folder_path_to_save_result = "../experiments"
-    experiment_label = "m-xgb-s-xgb_model-d-batch_r2"
+    experiment_label = "m-xgb-s-xgb_model"
 
     run_dt_exp(
         dt_df=dwell_time_df,
@@ -37,9 +37,9 @@ if __name__ == "__main__":
         interval_min=time_interval,
         chunk_size=chunk_size,
         active_strategy=active_strategy,
-        is_buffer_enabled=is_buffer_enabled,
         cdd_strategy=cdd_strategy,
         incremental_learning=incremental_learning,
+        is_buffer_enabled=is_buffer_enabled,
         output_parent_dir=folder_path_to_save_result,
         label=experiment_label,
     )
