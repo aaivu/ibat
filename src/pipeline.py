@@ -24,8 +24,8 @@ def run_dt_exp(
     interval_min: float,
     chunk_size: int,
     active_strategy: Optional[bool] = False,
-    is_buffer_enabled: Optional[bool] = False,
     cdd_strategy: Optional[IStrategy] = None,
+    is_buffer_enabled: Optional[bool] = False,
     incremental_learning: Optional[bool] = True,
     output_parent_dir: Optional[str] = "./",
     label: Optional[str] = "",
@@ -42,9 +42,9 @@ def run_dt_exp(
         interval_min: Minimum waiting time (in minutes) for data processing.
         chunk_size: Minimum required amount of data for data processing.
         active_strategy: Flag indicating whether to use active strategy (default is False).
-        is_buffer_enabled: To do (default is False).
         cdd_strategy: Strategy to be used for detecting concept drift. Required if active_strategy is True.
-        incremental_learning: To do (default is True).
+        is_buffer_enabled: Flag indicating whether buffering is enabled (default is False).
+        incremental_learning: Flag indicating whether to perform incremental learning (default is True).
         output_parent_dir: Parent directory's path to save experiment results.
         label: Experiment label (default is an empty string).
 
@@ -74,8 +74,13 @@ def run_dt_exp(
     else:
         strategy = "ACTIVE" if active_strategy else "PASSIVE"
 
+    if incremental_learning:
+        mu_strategy = "INCREMENTAL LEARNING"
+    else:
+        mu_strategy = "RETRAINING FROM SCRATCH"
+
     print(
-        f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy}"
+        f"BATCH PROCESSING TECHNIQUE: {bp_technique} | CONCEPT DRIFT HANDLING STRATEGY: {strategy} | STRATEGY TO UPDATE THE OUTDATED MODEL: {mu_strategy}"
     )
 
     dt_df["arrival_datetime"] = to_datetime(
@@ -129,6 +134,11 @@ def run_dt_exp(
         ].reset_index(drop=True)
         count_not_enough = dt_chunk.shape[0] < chunk_size
 
+        dt_full: DataFrame = dt_df.loc[
+            dt_df["arrival_datetime"] < to_date_time,
+            :,
+        ].reset_index(drop=True)
+
         if scheduled_bp or (hybrid_bp and not count_not_enough) or is_end_reached:
             from_date_time = (
                 stream_start if from_date_time == hist_start else to_date_time
@@ -145,6 +155,13 @@ def run_dt_exp(
 
             dt_x: DataFrame = numeric_dt_chunk.drop(columns=["dwell_time_in_seconds"])
             dt_y: DataFrame = numeric_dt_chunk[["dwell_time_in_seconds"]]
+
+            numeric_dt_full = dt_full.select_dtypes(include="number")
+
+            dt_full_x: DataFrame = numeric_dt_full.drop(
+                columns=["dwell_time_in_seconds"]
+            )
+            dt_full_y: DataFrame = numeric_dt_full[["dwell_time_in_seconds"]]
 
             if not model:
                 base_model = MME4BDT()
@@ -191,14 +208,28 @@ def run_dt_exp(
                         ni_dt_x=dt_x, ni_dt_y=dt_y
                     )
                     if is_detected:
-                        model.incremental_fit(
-                            ni_dt_x=ni_dt_x,
-                            ni_dt_y=ni_dt_y,
-                        )
+                        if incremental_learning:
+                            model.incremental_fit(
+                                ni_dt_x=ni_dt_x,
+                                ni_dt_y=ni_dt_y,
+                            )
+                        else:
+                            model = MME4BDT(cdd_strategy=cdd_strategy)
+                            model.fit(
+                                dt_x=dt_full_x,
+                                dt_y=dt_full_y,
+                            )
                         dt_x_buffer = None
                         dt_y_buffer = None
                 else:
-                    model.incremental_fit(ni_dt_x=dt_x, ni_dt_y=dt_y)
+                    if incremental_learning:
+                        model.incremental_fit(ni_dt_x=dt_x, ni_dt_y=dt_y)
+                    else:
+                        model = MME4BDT(cdd_strategy=cdd_strategy)
+                        model.fit(
+                            dt_x=dt_full_x,
+                            dt_y=dt_full_y,
+                        )
                     print()
 
                 end_time = time()
@@ -242,17 +273,18 @@ def run_dt_exp(
 - Minimum required amount of data: {chunk_size}
 - Batch processing technique: {bp_technique}
 - Concept drift handling strategy: {strategy}
-- Is buffer enabled: {is_buffer_enabled}
 - Concept drift detection algorithm: {cdd_strategy.__class__.__name__ if active_strategy else None}
+- Is buffer enabled: {is_buffer_enabled}
+- Strategy to update the outdated model: {mu_strategy}
 {cdd_strategy_content}
 
 ## Results
 - Model performance metrics:
 
-| Model                                | MAE (s)              | RMSE (s)              |
-|--------------------------------------|----------------------|-----------------------|
-| Base model (XGBoost)                 | {base_model_mae:.3f} | {base_model_rmse:.3f} |
-| Base model with incremental learning | {model_mae:.3f}      | {model_rmse:.3f}      |
+| Model                                     | MAE (s)              | RMSE (s)              |
+|-------------------------------------------|----------------------|-----------------------|
+| Base model without concept drift handling | {base_model_mae:.3f} | {base_model_rmse:.3f} |
+| Base model with concept drift handling    | {model_mae:.3f}      | {model_rmse:.3f}      |
 
 - Error reduction percentage in terms of MAE: {(base_model_mae - model_mae) * 100 / base_model_mae:.3f} %
 - Average processing time after the batch preparation: {mean(processing_times) * 1000:.3f} ms
@@ -352,7 +384,7 @@ def export_mean_dt_plot_as_image(
     plt.plot(
         x,
         dt_in_seconds_df["dwell_time_in_seconds"],
-        label="True dwell time",
+        label="Actual dwell time",
         marker="o",
         linestyle="-",
         color="blue",
@@ -360,7 +392,7 @@ def export_mean_dt_plot_as_image(
     plt.plot(
         x,
         base_model_prediction_df["base_model_prediction"],
-        label="Base model prediction",
+        label="Prediction of base model",
         marker="o",
         linestyle="--",
         color="green",
@@ -368,7 +400,7 @@ def export_mean_dt_plot_as_image(
     plt.plot(
         x,
         model_prediction_df["model_prediction"],
-        label="Prediction with incremental online learning",
+        label="Prediction of base model with experimental setup",
         marker="o",
         linestyle="--",
         color="orange",
