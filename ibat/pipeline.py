@@ -347,7 +347,10 @@ def run_dt_exp(
 
         from_time = to_time
 
-    print("\rGENERATING & EXPORTING PLOTS FOR EACH BUS STOP ENDED.", flush=True)
+    print(
+        "\rGENERATING & EXPORTING PLOTS FOR EACH BUS STOP ENDED.               ",
+        flush=True,
+    )
 
 
 def export_mean_dt_plot_as_image(

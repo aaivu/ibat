@@ -19,6 +19,13 @@ format:
 lint:
 	./venv/bin/flake8 ./ibat
 
+.PHONY: build-wheel
+build-wheel:
+	rm -rf dist
+	rm -rf ibat.egg-info
+	rm -rf build
+	python setup.py sdist bdist_wheel
+
 .PHONY: clean
 clean:
 	rm -rf venv

@@ -46,6 +46,7 @@ prediction models in heterogeneous traffic conditions by addressing real concept
     classifiers=classifiers,
     packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
+    package_data={"": ["datasets/_datasets/*.csv"]},
     install_requires=requirements,
     project_urls={
         "Source Code": "https://github.com/aaivu/ibat",
