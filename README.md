@@ -1,21 +1,44 @@
 <p align="center">
-    <img height="238" src="./docs/images/logo-1.png" alt="ibat_logo">
+    <img height="238" src="./asserts/images/logo-1.png" alt="ibat_logo">
+</p>
+
+[//]: # (<p align="center">)
+
+[//]: # (    <img src="https://img.shields.io/badge/-Project-blue" alt="project">)
+
+[//]: # (    <img src="https://img.shields.io/badge/-Research-yellowgreen" alt="research">)
+
+[//]: # (</p>)
+
+<p align="center">
+    <!-- PyPI -->
+    <a href="https://pypi.org/project/gps2gtfs">
+        <img src="https://img.shields.io/pypi/v/gps2gtfs.svg?label=PyPI%20release&color=blue&style=flat-square" alt="pypi">
+    </a>
+    <!-- PePy -->
+    <a href="https://pepy.tech/project/gps2gtfs">
+        <img src="https://static.pepy.tech/badge/gps2gtfs?label=PyPI%20downloads&color=blue&style=flat-square" alt="pepy">
+    </a>
+    <!-- Black -->
+    <a href="https://github.com/psf/black">
+        <img src="https://img.shields.io/badge/code%20style-black-000000.svg?color=blue" alt="black">
+    </a>
+    <!-- License -->
+    <a href="https://opensource.org/licenses/BSD-3-Clause">
+        <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=flat-square" alt="bsd_3_license">
+    </a>
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/-Project-blue" alt="project">
-    <img src="https://img.shields.io/badge/-Research-yellowgreen" alt="research">
-</p>
-<p align="center">
-    <img src="https://img.shields.io/badge/Bus%20arrival%20time%20prediction-8A2BE2" alt="batpre">
+    <img src="https://img.shields.io/badge/Bus%20arrival/dwell%20time%20prediction-8A2BE2" alt="batpre">
     <img src="https://img.shields.io/badge/Hybrid%20batch%20processing-8A2BE2" alt="hbp">
     <img src="https://img.shields.io/badge/Concept%20drift%20handling-8A2BE2" alt="cdrift">
     <img src="https://img.shields.io/badge/Active%20strategy-8A2BE2" alt="active">
-    <img src="https://img.shields.io/badge/Incremental%20online%20learning-8A2BE2" alt="iol">
+    <img src="https://img.shields.io/badge/Incremental%20learning-8A2BE2" alt="iol">
 </p>
 
 <p align="center">
-    <b>iBAT</b> is a Python framework to enhance the real-time bus arrival time prediction in heterogenous traffic condition by addressing concept drift.
+    <b>iBAT</b> is a Python framework to enhance the real-time bus arrival/dwell time prediction in heterogenous traffic condition by addressing concept drift.
 </p>
 
 ## Description
@@ -27,7 +50,7 @@
 ## Architecture
 
 <p align="center">
-    <img src="./docs/images/archi-dig.png" alt="archi-dig">
+    <img height="400" src="./asserts/images/archi-dig.png" alt="archi-dig">
 </p>
 
 ## 🛠 Installation
@@ -101,9 +124,9 @@ if __name__ == "__main__":
         interval_min=60 * 2,
         chunk_size=100,
         active_strategy=True,
-        is_buffer_enabled=False,
         cdd_strategy=cdd_strategy,
         incremental_learning=True,
+        is_buffer_enabled=False,
         output_parent_dir="./demo",
         label="demo-dt-exp-for-hbp",
     )
