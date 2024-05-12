@@ -1,16 +1,20 @@
 from setuptools import setup, find_packages
+from codecs import open
+from os import path
 
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+
+HERE = path.abspath(path.dirname(__file__))
+
+with open(path.join(HERE, "README.md"), "r", encoding='utf-8') as f:
+    long_description = f.read()
+
+with open(path.join(HERE, "requirements.txt"), "r", encoding='utf-8') as f:
+    requirements = f.read().splitlines()
 
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "Programming Language :: Python :: 3 :: Only",  # Specify Python 3 only
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -21,25 +25,34 @@ classifiers = [
 ]
 
 setup(
-    name="iBAT",
-    packages=find_packages(),
+    name="ibat",
     version="0.1.0-rc1",
-    description="A Python framework to enhance the real-time bus arrival time prediction in heterogeneous traffic condition by addressing concept drift.",
+    description="Python framework designed to improve the robustness of real-time bus arrival/dwell time \
+prediction models in heterogeneous traffic conditions by addressing real concept drift.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/aaivu/Incremental-Online-Learning-for-BAT-Prediction/",
-    keywords=['GPS', 'Travel Time', 'Public Transit', 'Heterogeneous Traffic Condition', 'ITS (Intelligent Transportation System)', 'Dwell Time', 'Incremental Learning', 'Concept Drift'],
+    url="https://github.com/aaivu/ibat/",
+    keywords=[
+        "Bus arrival/dwell time prediction",
+        "Hybrid batch processing",
+        "Concept drift handling",
+        "Active strategy",
+        "Incremental learning",
+    ],
     author="Aaivu",
     author_email='helloaaivu@gmail.com',
-    license='MIT',
+    license="MIT",
+    python_requires=">=3.9",
     classifiers=classifiers,
-    python_requires=">=3.6",
-    install_requires=['pandas', 'numpy', 'Cython', 'matplotlib', 'scikit-learn', 'xgboost', 'frouros', 'scikit-multiflow'],
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
+    include_package_data=True,
+    install_requires=requirements,
     project_urls={
-        "Homepage": "https://github.com/aaivu/Incremental-Online-Learning-for-BAT-Prediction/",
-        "Source": "https://github.com/aaivu/Incremental-Online-Learning-for-BAT-Prediction/",
-        "Download": "https://github.com/aaivu/Incremental-Online-Learning-for-BAT-Prediction/",
-        "Documentation": "https://github.com/aaivu/Incremental-Online-Learning-for-BAT-Prediction/blob/master/PACKAGE_DESCRIPTION.md",
-        "Bug Tracker": "https://github.com/aaivu/Incremental-Online-Learning-for-BAT-Prediction/issues",
+        "Homepage": "https://github.com/aaivu/ibat",
+        "Source": "https://github.com/aaivu/ibat",
+        "Download": "https://github.com/aaivu/ibat/releases",
+        "Documentation": "https://github.com/aaivu/ibat/blob/master/README.md",
+        "Bug Tracker": "https://github.com/aaivu/ibat/issues",
     }
 )
