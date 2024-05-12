@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from src.concept_drift_detector.strategies import DDM
-from src.datasets import BUS_654_FEATURES_ENCODED_DWELL_TIMES
-from src.pipeline import run_dt_exp
+from ibat.concept_drift_detector.strategies import DDM
+from ibat.datasets import BUS_654_FEATURES_ENCODED_DWELL_TIMES
+from ibat.pipeline import run_dt_exp
 
 
 def datetime_from_string(datetime_string: str) -> datetime:

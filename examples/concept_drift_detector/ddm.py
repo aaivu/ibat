@@ -1,8 +1,8 @@
 import pandas as pd
 from xgboost import XGBRegressor
 from sklearn.pipeline import Pipeline
-from src.concept_drift_detector import CDD
-from src.concept_drift_detector.strategies import DDM
+from ibat.concept_drift_detector import CDD
+from ibat.concept_drift_detector.strategies import DDM
 
 
 def split_train_test(split_date, df):

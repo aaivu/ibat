@@ -1,14 +1,14 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 from codecs import open
 from os import path
 
 
 HERE = path.abspath(path.dirname(__file__))
 
-with open(path.join(HERE, "README.md"), "r", encoding='utf-8') as f:
+with open(path.join(HERE, "README.md"), "r", encoding="utf-8") as f:
     long_description = f.read()
 
-with open(path.join(HERE, "requirements.txt"), "r", encoding='utf-8') as f:
+with open(path.join(HERE, "requirements.txt"), "r", encoding="utf-8") as f:
     requirements = f.read().splitlines()
 
 classifiers = [
@@ -40,19 +40,17 @@ prediction models in heterogeneous traffic conditions by addressing real concept
         "Incremental learning",
     ],
     author="Aaivu",
-    author_email='helloaaivu@gmail.com',
+    author_email="helloaaivu@gmail.com",
     license="MIT",
     python_requires=">=3.9",
     classifiers=classifiers,
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
     install_requires=requirements,
     project_urls={
-        "Homepage": "https://github.com/aaivu/ibat",
         "Source Code": "https://github.com/aaivu/ibat",
         "Download": "https://github.com/aaivu/ibat/releases",
         "Documentation": "https://github.com/aaivu/ibat/blob/master/README.md",
         "Bug Tracker": "https://github.com/aaivu/ibat/issues",
-    }
+    },
 )
