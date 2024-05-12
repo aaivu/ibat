@@ -50,7 +50,7 @@
 ## Architecture
 
 <p align="center">
-    <img height="400" src="./asserts/images/archi-dig.png" alt="archi-dig">
+    <img height="640" src="./asserts/images/archi-dig.png" alt="archi-dig">
 </p>
 
 ## 🛠 Installation
