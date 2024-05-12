@@ -4,7 +4,7 @@ from src.concept_drift_detector import CDD
 from src.concept_drift_detector.strategies import PageHinkley
 
 
-sorted_mean_arrival_time = pd.read_csv("../../docs/datasets/input.csv")
+sorted_mean_arrival_time = pd.read_csv("../../asserts/datasets/input.csv")
 
 stream = np.array(list(sorted_mean_arrival_time["arrival_time_in_seconds"]))
 

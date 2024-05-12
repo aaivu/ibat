@@ -17,7 +17,7 @@ def split_train_test(split_date, df):
     return before_missing_dates, after_missing_dates
 
 
-sorted_mean_arrival_time = pd.read_csv("../../docs/datasets/input.csv")
+sorted_mean_arrival_time = pd.read_csv("../../asserts/datasets/input.csv")
 
 train, test = split_train_test("2022-03-01", sorted_mean_arrival_time)
 
