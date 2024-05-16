@@ -38,7 +38,7 @@
 </p>
 
 <p align="center">
-    <b>iBAT</b> is a Python framework to enhance the real-time bus arrival/dwell time prediction in heterogenous traffic condition by addressing concept drift.
+    <b>iBAT</b> is a Python framework to enhance the real-time bus arrival/dwell time prediction in heterogeneous traffic conditions by addressing concept drift.
 </p>
 
 ## Description
