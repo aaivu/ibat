@@ -159,9 +159,7 @@ def run_rt_exp(
 
             numeric_rt_full = rt_full.select_dtypes(include="number")
 
-            rt_full_x: DataFrame = numeric_rt_full.drop(
-                columns=["run_time_in_seconds"]
-            )
+            rt_full_x: DataFrame = numeric_rt_full.drop(columns=["run_time_in_seconds"])
             rt_full_y: DataFrame = numeric_rt_full[["run_time_in_seconds"]]
 
             if not model:
@@ -262,7 +260,9 @@ def run_rt_exp(
     base_model_rmse = root_mean_squared_error(true_predictions, base_model_predictions)
     model_rmse = root_mean_squared_error(true_predictions, model_predictions)
 
-    base_model_mape = mean_absolute_percentage_error(true_predictions, base_model_predictions)
+    base_model_mape = mean_absolute_percentage_error(
+        true_predictions, base_model_predictions
+    )
     model_mape = mean_absolute_percentage_error(true_predictions, model_predictions)
 
     md_file_content = f"""

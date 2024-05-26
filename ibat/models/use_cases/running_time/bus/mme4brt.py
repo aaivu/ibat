@@ -34,9 +34,7 @@ class MME4BRT:
                 ni_x=ni_rt_x,
                 ni_y=ni_rt_y,
             )
-            print(
-                f" | CDD at xgb_rt_regressor: {is_detected_1}"
-            )
+            print(f" | CDD at xgb_rt_regressor: {is_detected_1}")
             return is_detected_1
         except NameError as e:
             raise e
