@@ -25,7 +25,7 @@ if __name__ == "__main__":
     )
     incremental_learning = True
     is_buffer_enabled = False
-    folder_path_to_save_result = "../experiments"
+    folder_path_to_save_result = "../../experiments"
     experiment_label = "m-xgb-s-xgb_model"
 
     run_dt_exp(
